@@ -1,0 +1,44 @@
+spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/veggie_hunter
+    username: root
+    password: Tjwjdeogus369!
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    database-platform: mysql
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 457462530970-iu06l6ioibl20h4an0ktic1domln1364.apps.googleusercontent.com
+            client-secret: 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
+            redirect-uri: http://localhost:8080/login/oauth2/code/google
+            scope: email
+
+
+jwt:
+  secretKey: 'qwjedas9hrb18odxkcnwgkjkladhnw9182nmsd0s89y12mne123mksnsaujfdhowkrn3k45786zxnmcvwjehrkeljhfjwh1'
+
+  access:
+    expiration: 300000000
+    header: Authorization
+
+  refresh:
+    expiration: 1200000
+    header: Authorization-refresh
