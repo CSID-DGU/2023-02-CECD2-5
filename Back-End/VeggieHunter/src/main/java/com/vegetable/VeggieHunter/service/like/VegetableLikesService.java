@@ -6,7 +6,7 @@ import com.vegetable.VeggieHunter.domain.User;
 import com.vegetable.VeggieHunter.domain.Vegetable;
 import com.vegetable.VeggieHunter.dto.response.CommonResponse;
 import com.vegetable.VeggieHunter.dto.response.ResponseService;
-import com.vegetable.VeggieHunter.dto.response.vegetable.VegetableResponse;
+import com.vegetable.VeggieHunter.dto.response.vegetable.VegetableLikesResponse;
 import com.vegetable.VeggieHunter.repository.likes.VegetableLikesRepository;
 import com.vegetable.VeggieHunter.repository.user.UserRepository;
 import com.vegetable.VeggieHunter.repository.vegetable.VegetableRepository;
@@ -14,12 +14,14 @@ import com.vegetable.VeggieHunter.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class VegetableLikesService {
     private final UserRepository userRepository;
     private final VegetableLikesRepository vegetableLikesRepository;
@@ -31,8 +33,8 @@ public class VegetableLikesService {
         User user = securityUtil.getAuthUserOrThrow();
         List<VegetableLikes> vegetableLikesList = vegetableLikesRepository.findAllByUserId(user.getId());
 
-        List<VegetableResponse> boardResponseList = vegetableLikesList.stream()
-                .map(vegetableLikes -> new VegetableResponse(vegetableLikes.getVegetable()))
+        List<VegetableLikesResponse> boardResponseList = vegetableLikesList.stream()
+                .map(vegetableLikes -> new VegetableLikesResponse(vegetableLikes.getVegetable()))
                 .collect(Collectors.toList());
 
         return responseService.getListResponse(HttpStatus.OK.value(), boardResponseList);

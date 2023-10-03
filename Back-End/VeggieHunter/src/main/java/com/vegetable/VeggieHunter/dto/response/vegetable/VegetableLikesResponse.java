@@ -2,12 +2,10 @@ package com.vegetable.VeggieHunter.dto.response.vegetable;
 
 import com.vegetable.VeggieHunter.domain.Price;
 import com.vegetable.VeggieHunter.domain.Vegetable;
-import jakarta.persistence.Lob;
-import jakarta.persistence.OneToMany;
 
 import java.util.List;
 
-public class VegetableResponse {
+public class VegetableLikesResponse {
     private String name;
 
     private String image;
@@ -16,7 +14,7 @@ public class VegetableResponse {
 
     private List<Price> priceList;
 
-    public VegetableResponse(Vegetable vegetable) {
+    public VegetableLikesResponse(Vegetable vegetable) {
         this.name = vegetable.getName();
         this.image = vegetable.getImage();
         this.storageMethod = vegetable.getStorageMethod();
