@@ -1,6 +1,20 @@
 import requests
 from bs4 import BeautifulSoup
 import re
+import pymysql
+
+host = "veggiehunter-springboot-webservice.cnrhvv9ptkr7.ap-northeast-2.rds.amazonaws.com"
+database = "veggiehunter"
+username = "veggiehunter"
+password = "veggiehunter5"
+
+# RDS에 연결
+connection = pymysql.connect(host=host,
+                             user=username,
+                             password=password,
+                             database=database,
+                             charset='utf8mb4',
+                             cursorclass=pymysql.cursors.DictCursor)
 
 URLS = [
     "https://www.esingsing.co.kr/bbs/board.php?bo_table=200&sca=%EC%8B%9C%EA%B8%88%EC%B9%98&pcon=1101",
@@ -34,17 +48,49 @@ def extract_info_from_url(url):
 
     price_element = soup.select_one('dpr1')
     if price_element:
-        price = float(price_element.text.replace(',', '').strip())  # 콤마 제거 후 실수로 변환
-        if weight:
-            price_per_unit = price / weight  # 단위당 가격 계산
-        else:
+        price_text = price_element.text.replace(',', '').strip()
+
+        if price_text == '-':
+            price = None  # 또는 다른 기본값 설정
             price_per_unit = None
+        else:
+            try:
+                price = float(price_text)
+                if weight:
+                    price_per_unit = price / weight  # 단위당 가격 계산
+                else:
+                    price_per_unit = None
+            except ValueError:
+                print(f"가격 정보를 부동 소수점으로 변환할 수 없습니다: {price_text}")
+                price = None
+                price_per_unit = None
     else:
-        price_per_unit = "Cannot extract price"
+        price = price_per_unit = "Cannot extract price"
 
     return veg_name, unit, price_per_unit
 
+try:
+    for url in URLS:
+        veg_name, unit, price_per_unit = extract_info_from_url(url)
+        print(f"URL: {url}\nVegetable: {veg_name}, Unit: {unit}, Price per {unit}: {price_per_unit}\n")
 
-for url in URLS:
-    veg_name, unit, price_per_unit = extract_info_from_url(url)
-    print(f"URL: {url}\nVegetable: {veg_name}, Unit: {unit}, Price per {unit}: {price_per_unit}\n")
+        if price_per_unit != None:
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT MAX(id) FROM price;")
+                max_id_result = cursor.fetchone()
+                if max_id_result and 'MAX(id)' in max_id_result:
+                    max_id = max_id_result['MAX(id)']
+                    # 만약 max_id가 None이라면 0으로 초기화
+                    max_id = max_id if max_id is not None else 0
+                    id = max_id + 1
+                else:
+                    # 테이블에 레코드가 없는 경우, id를 1로 설정
+                    id = 1
+
+                cursor.execute(
+                    "INSERT INTO price (id, name, price, unit, created_date, updated_date) VALUES (%s, %s, %s, %s, now(), now())",
+                    (id, veg_name, price_per_unit, unit))
+    cursor.close()
+finally:
+    connection.commit()
+    connection.close()
