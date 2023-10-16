@@ -1,4 +1,4 @@
-package com.vegetable.VeggieHunter.domain;
+package com.vegetable.veggiehunter.domain;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -15,7 +15,7 @@ import com.querydsl.core.types.Path;
 @Generated("com.querydsl.codegen.DefaultSupertypeSerializer")
 public class QBaseTime extends EntityPathBase<BaseTime> {
 
-    private static final long serialVersionUID = 954149823L;
+    private static final long serialVersionUID = 599223167L;
 
     public static final QBaseTime baseTime = new QBaseTime("baseTime");
 

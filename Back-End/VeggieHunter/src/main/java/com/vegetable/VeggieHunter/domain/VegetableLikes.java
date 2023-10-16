@@ -1,4 +1,4 @@
-package com.vegetable.VeggieHunter.domain;
+package com.vegetable.veggiehunter.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;

@@ -1,4 +1,4 @@
-package com.vegetable.VeggieHunter.constant;
+package com.vegetable.veggiehunter.domain;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

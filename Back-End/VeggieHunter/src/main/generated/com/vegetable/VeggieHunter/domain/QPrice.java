@@ -1,4 +1,4 @@
-package com.vegetable.VeggieHunter.domain;
+package com.vegetable.veggiehunter.domain;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -16,7 +16,7 @@ import com.querydsl.core.types.dsl.PathInits;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QPrice extends EntityPathBase<Price> {
 
-    private static final long serialVersionUID = 1625422440L;
+    private static final long serialVersionUID = -1674063192L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 

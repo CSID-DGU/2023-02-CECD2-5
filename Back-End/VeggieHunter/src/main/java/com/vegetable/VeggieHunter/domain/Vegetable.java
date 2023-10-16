@@ -1,4 +1,4 @@
-package com.vegetable.VeggieHunter.domain;
+package com.vegetable.veggiehunter.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
