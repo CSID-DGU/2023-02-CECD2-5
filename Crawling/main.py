@@ -24,7 +24,17 @@ URLS = [
     "https://www.esingsing.co.kr/bbs/board.php?bo_table=200&sca=%ED%94%BC%EB%A7%9D&pcon=1101",
     "https://www.esingsing.co.kr/bbs/board.php?bo_table=200&sca=%EA%B9%BB%EC%9E%8E&pcon=1101",
     "https://www.esingsing.co.kr/bbs/board.php?bo_table=200&sca=%EB%AF%B8%EB%82%98%EB%A6%AC&pcon=1101",
-    "https://www.esingsing.co.kr/bbs/board.php?bo_table=200&sca=%EC%96%BC%EA%B0%88%EC%9D%B4%EB%B0%B0%EC%B6%94&pcon=1101"
+    "https://www.esingsing.co.kr/bbs/board.php?bo_table=200&sca=%EC%96%BC%EA%B0%88%EC%9D%B4%EB%B0%B0%EC%B6%94&pcon=1101",
+    "https://www.esingsing.co.kr/bbs/board.php?bo_table=100&sca=%EA%B3%A0%EA%B5%AC%EB%A7%88&pcon=1101"
+    "https://www.esingsing.co.kr/bbs/board.php?bo_table=100&sca=%EB%A9%94%EB%B0%80&pcon=1101",
+    "https://www.esingsing.co.kr/bbs/board.php?bo_table=200s&sca=%EC%88%98%EB%B0%95&pcon=1101",
+    "https://www.esingsing.co.kr/bbs/board.php?bo_table=200s&sca=%EB%A9%9C%EB%A1%A0&pcon=1101",
+    "https://www.esingsing.co.kr/bbs/board.php?bo_table=200s&sca=%ED%86%A0%EB%A7%88%ED%86%A0&pcon=1101",
+    "https://www.esingsing.co.kr/bbs/board.php?bo_table=200s&sca=%EB%B0%A9%EC%9A%B8%ED%86%A0%EB%A7%88%ED%86%A0&pcon=1101",
+    "https://www.esingsing.co.kr/bbs/board.php?bo_table=400&sca=%EB%8B%A8%EA%B0%90&pcon=1101",
+    "https://www.esingsing.co.kr/bbs/board.php?bo_table=300&sca=%ED%8C%BD%EC%9D%B4%EB%B2%84%EC%84%AF&pcon=1101",
+    "https://www.esingsing.co.kr/bbs/board.php?bo_table=300&sca=%EC%83%88%EC%86%A1%EC%9D%B4%EB%B2%84%EC%84%AF&pcon=1101",
+
 ]
 
 
