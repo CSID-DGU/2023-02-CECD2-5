@@ -1,4 +1,4 @@
-package com.vegetable.VeggieHunter.security;
+package com.vegetable.veggiehunter.security;
 
 public class exSecurity {
 }

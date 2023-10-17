@@ -1,4 +1,4 @@
-package com.vegetable.VeggieHunter.security.jwt.util;
+package com.vegetable.veggiehunter.security.jwt.util;
 
 import java.util.Random;
 

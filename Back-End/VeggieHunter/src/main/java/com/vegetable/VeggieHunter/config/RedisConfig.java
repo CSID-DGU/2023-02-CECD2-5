@@ -1,4 +1,4 @@
-package com.vegetable.VeggieHunter.config;
+package com.vegetable.veggiehunter.config;
 
 
 import lombok.RequiredArgsConstructor;

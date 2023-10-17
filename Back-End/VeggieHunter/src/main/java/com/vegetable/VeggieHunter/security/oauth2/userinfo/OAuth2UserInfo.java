@@ -1,4 +1,4 @@
-package com.vegetable.VeggieHunter.security.oauth2.userinfo;
+package com.vegetable.veggiehunter.security.oauth2.userinfo;
 
 import java.util.Map;
 

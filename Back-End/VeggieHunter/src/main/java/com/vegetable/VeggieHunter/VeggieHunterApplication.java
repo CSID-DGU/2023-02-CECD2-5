@@ -1,13 +1,13 @@
-package com.vegetable.VeggieHunter;
+package com.vegetable.veggiehunter;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class VeggieHunterApplication {
+public class veggieHunterApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(VeggieHunterApplication.class, args);
+		SpringApplication.run(veggieHunterApplication.class, args);
 	}
 
 }

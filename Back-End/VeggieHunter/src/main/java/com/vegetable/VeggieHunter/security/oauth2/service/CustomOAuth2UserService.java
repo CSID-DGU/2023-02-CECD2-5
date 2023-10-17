@@ -1,9 +1,9 @@
-package com.vegetable.VeggieHunter.security.oauth2.service;
+package com.vegetable.veggiehunter.security.oauth2.service;
 
-import com.vegetable.VeggieHunter.domain.User;
-import com.vegetable.VeggieHunter.repository.user.UserRepository;
-import com.vegetable.VeggieHunter.security.oauth2.CustomOAuth2User;
-import com.vegetable.VeggieHunter.security.oauth2.OAuthAttributes;
+import com.vegetable.veggiehunter.domain.User;
+import com.vegetable.veggiehunter.repository.user.UserRepository;
+import com.vegetable.veggiehunter.security.oauth2.CustomOAuth2User;
+import com.vegetable.veggiehunter.security.oauth2.OAuthAttributes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

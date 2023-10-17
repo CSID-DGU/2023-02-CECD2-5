@@ -1,10 +1,10 @@
-package com.vegetable.VeggieHunter.security.jwt.filter;
+package com.vegetable.veggiehunter.security.jwt.filter;
 
-import com.vegetable.VeggieHunter.domain.User;
-import com.vegetable.VeggieHunter.repository.user.UserRepository;
-import com.vegetable.VeggieHunter.security.jwt.service.JwtService;
-import com.vegetable.VeggieHunter.security.jwt.util.PasswordUtil;
-import com.vegetable.VeggieHunter.util.RedisUtil;
+import com.vegetable.veggiehunter.domain.User;
+import com.vegetable.veggiehunter.repository.user.UserRepository;
+import com.vegetable.veggiehunter.security.jwt.service.JwtService;
+import com.vegetable.veggiehunter.security.jwt.util.PasswordUtil;
+import com.vegetable.veggiehunter.util.RedisUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

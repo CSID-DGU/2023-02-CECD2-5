@@ -1,12 +1,12 @@
-package com.vegetable.VeggieHunter.security.config;
+package com.vegetable.veggiehunter.security.config;
 
-import com.vegetable.VeggieHunter.repository.user.UserRepository;
-import com.vegetable.VeggieHunter.security.jwt.filter.JwtAuthenticationProcessingFilter;
-import com.vegetable.VeggieHunter.security.jwt.service.JwtService;
-import com.vegetable.VeggieHunter.security.oauth2.handler.OAuth2LoginFailureHandler;
-import com.vegetable.VeggieHunter.security.oauth2.handler.OAuth2LoginSuccessHandler;
-import com.vegetable.VeggieHunter.security.oauth2.service.CustomOAuth2UserService;
-import com.vegetable.VeggieHunter.util.RedisUtil;
+import com.vegetable.veggiehunter.repository.user.UserRepository;
+import com.vegetable.veggiehunter.security.jwt.filter.JwtAuthenticationProcessingFilter;
+import com.vegetable.veggiehunter.security.jwt.service.JwtService;
+import com.vegetable.veggiehunter.security.oauth2.handler.OAuth2LoginFailureHandler;
+import com.vegetable.veggiehunter.security.oauth2.handler.OAuth2LoginSuccessHandler;
+import com.vegetable.veggiehunter.security.oauth2.service.CustomOAuth2UserService;
+import com.vegetable.veggiehunter.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

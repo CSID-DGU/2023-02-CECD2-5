@@ -1,9 +1,9 @@
-package com.vegetable.VeggieHunter.controller.user;
+package com.vegetable.veggiehunter.controller.user;
 
-import com.vegetable.VeggieHunter.dto.response.CommonResponse;
-import com.vegetable.VeggieHunter.dto.response.ResponseService;
-import com.vegetable.VeggieHunter.security.jwt.service.JwtService;
-import com.vegetable.VeggieHunter.service.user.UserService;
+import com.vegetable.veggiehunter.dto.response.CommonResponse;
+import com.vegetable.veggiehunter.dto.response.ResponseService;
+import com.vegetable.veggiehunter.security.jwt.service.JwtService;
+import com.vegetable.veggiehunter.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;

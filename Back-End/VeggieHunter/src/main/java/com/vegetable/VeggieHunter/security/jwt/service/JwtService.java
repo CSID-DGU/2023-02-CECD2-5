@@ -1,8 +1,8 @@
-package com.vegetable.VeggieHunter.security.jwt.service;
+package com.vegetable.veggiehunter.security.jwt.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.vegetable.VeggieHunter.repository.user.UserRepository;
+import com.vegetable.veggiehunter.repository.user.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;

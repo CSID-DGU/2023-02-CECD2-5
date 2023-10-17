@@ -1,4 +1,4 @@
-package com.vegetable.VeggieHunter.security.oauth2.handler;
+package com.vegetable.veggiehunter.security.oauth2.handler;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

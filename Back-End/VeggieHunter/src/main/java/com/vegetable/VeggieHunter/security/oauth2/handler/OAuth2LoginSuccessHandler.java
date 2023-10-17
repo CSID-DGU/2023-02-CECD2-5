@@ -1,12 +1,12 @@
-package com.vegetable.VeggieHunter.security.oauth2.handler;
+package com.vegetable.veggiehunter.security.oauth2.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vegetable.VeggieHunter.constant.Role;
-import com.vegetable.VeggieHunter.domain.User;
-import com.vegetable.VeggieHunter.dto.response.CommonResponse;
-import com.vegetable.VeggieHunter.repository.user.UserRepository;
-import com.vegetable.VeggieHunter.security.jwt.service.JwtService;
-import com.vegetable.VeggieHunter.security.oauth2.CustomOAuth2User;
+import com.vegetable.veggiehunter.constant.Role;
+import com.vegetable.veggiehunter.domain.User;
+import com.vegetable.veggiehunter.dto.response.CommonResponse;
+import com.vegetable.veggiehunter.repository.user.UserRepository;
+import com.vegetable.veggiehunter.security.jwt.service.JwtService;
+import com.vegetable.veggiehunter.security.oauth2.CustomOAuth2User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

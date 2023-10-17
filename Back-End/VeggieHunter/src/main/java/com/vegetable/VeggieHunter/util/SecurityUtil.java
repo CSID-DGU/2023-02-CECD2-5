@@ -1,8 +1,8 @@
-package com.vegetable.VeggieHunter.util;
+package com.vegetable.veggiehunter.util;
 
-import com.vegetable.VeggieHunter.constant.Role;
-import com.vegetable.VeggieHunter.domain.User;
-import com.vegetable.VeggieHunter.repository.user.UserRepository;
+import com.vegetable.veggiehunter.constant.Role;
+import com.vegetable.veggiehunter.domain.User;
+import com.vegetable.veggiehunter.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;

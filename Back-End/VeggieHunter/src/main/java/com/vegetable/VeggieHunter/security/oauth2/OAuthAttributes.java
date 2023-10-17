@@ -1,9 +1,9 @@
-package com.vegetable.VeggieHunter.security.oauth2;
+package com.vegetable.veggiehunter.security.oauth2;
 
-import com.vegetable.VeggieHunter.constant.Role;
-import com.vegetable.VeggieHunter.domain.User;
-import com.vegetable.VeggieHunter.security.oauth2.userinfo.GoogleOAuth2UserInfo;
-import com.vegetable.VeggieHunter.security.oauth2.userinfo.OAuth2UserInfo;
+import com.vegetable.veggiehunter.constant.Role;
+import com.vegetable.veggiehunter.domain.User;
+import com.vegetable.veggiehunter.security.oauth2.userinfo.GoogleOAuth2UserInfo;
+import com.vegetable.veggiehunter.security.oauth2.userinfo.OAuth2UserInfo;
 import lombok.Builder;
 import lombok.Getter;
 

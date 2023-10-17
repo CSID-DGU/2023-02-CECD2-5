@@ -10,12 +10,12 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/veggie_hunter
-    username: root
-    password: Tjwjdeogus369!
+    url: jdbc:mysql://veggiehunter-springboot-webservice.cnrhvv9ptkr7.ap-northeast-2.rds.amazonaws.com:3306/veggiehunter
+    username: veggiehunter
+    password: veggiehunter5
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         format_sql:

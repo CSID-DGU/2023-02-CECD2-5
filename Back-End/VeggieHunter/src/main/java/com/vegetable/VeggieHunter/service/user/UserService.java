@@ -1,10 +1,10 @@
-package com.vegetable.VeggieHunter.service.user;
+package com.vegetable.veggiehunter.service.user;
 
-import com.vegetable.VeggieHunter.constant.Role;
-import com.vegetable.VeggieHunter.domain.User;
-import com.vegetable.VeggieHunter.security.jwt.service.JwtService;
-import com.vegetable.VeggieHunter.util.RedisUtil;
-import com.vegetable.VeggieHunter.util.SecurityUtil;
+import com.vegetable.veggiehunter.constant.Role;
+import com.vegetable.veggiehunter.domain.User;
+import com.vegetable.veggiehunter.security.jwt.service.JwtService;
+import com.vegetable.veggiehunter.util.RedisUtil;
+import com.vegetable.veggiehunter.util.SecurityUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.vegetable.VeggieHunter.util;
+package com.vegetable.veggiehunter.util;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;

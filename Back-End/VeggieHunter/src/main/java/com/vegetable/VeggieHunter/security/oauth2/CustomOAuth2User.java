@@ -1,6 +1,6 @@
-package com.vegetable.VeggieHunter.security.oauth2;
+package com.vegetable.veggiehunter.security.oauth2;
 
-import com.vegetable.VeggieHunter.constant.Role;
+import com.vegetable.veggiehunter.constant.Role;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
