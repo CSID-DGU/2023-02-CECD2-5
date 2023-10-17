@@ -1,8 +1,6 @@
-package com.vegetable.VeggieHunter.domain;
+package com.vegetable.veggiehunter.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 
 @Entity
@@ -12,9 +10,10 @@ public class Price extends BaseTime {
     @GeneratedValue
     private Long id;
 
-    private String item_name;
+    private String vegetable_name;
 
     private Double price;
 
     private String unit;
+
 }

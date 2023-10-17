@@ -1,4 +1,4 @@
-package com.vegetable.VeggieHunter.domain;
+package com.vegetable.veggiehunter.domain;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -15,7 +15,7 @@ import com.querydsl.core.types.Path;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QUser extends EntityPathBase<User> {
 
-    private static final long serialVersionUID = -1748532532L;
+    private static final long serialVersionUID = -1439325556L;
 
     public static final QUser user = new QUser("user");
 
@@ -27,7 +27,7 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath refreshToken = createString("refreshToken");
 
-    public final EnumPath<com.vegetable.VeggieHunter.constant.Role> role = createEnum("role", com.vegetable.VeggieHunter.constant.Role.class);
+    public final EnumPath<com.vegetable.veggiehunter.constant.Role> role = createEnum("role", com.vegetable.veggiehunter.constant.Role.class);
 
     public final StringPath socialId = createString("socialId");
 

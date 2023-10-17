@@ -1,4 +1,4 @@
-package com.vegetable.VeggieHunter.dto.response;
+package com.vegetable.veggiehunter.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
