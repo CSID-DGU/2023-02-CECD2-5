@@ -26,14 +26,14 @@ public class QPrice extends EntityPathBase<Price> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final StringPath name = createString("name");
-
     public final NumberPath<Double> price = createNumber("price", Double.class);
 
     public final StringPath unit = createString("unit");
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedDate = _super.updatedDate;
+
+    public final StringPath vegetable_name = createString("vegetable_name");
 
     public QPrice(String variable) {
         super(Price.class, forVariable(variable));
