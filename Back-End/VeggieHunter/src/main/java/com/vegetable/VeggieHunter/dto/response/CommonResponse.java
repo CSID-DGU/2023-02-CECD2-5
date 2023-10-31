@@ -15,6 +15,10 @@ public class CommonResponse {
 //    @ApiModelProperty(value = "응답 코드 번호")
     private int code;
 
+    public CommonResponse(boolean success) {
+        this.success = success;
+    }
+
     public static class GeneralResponse extends CommonResponse {
         private String msg;
 
