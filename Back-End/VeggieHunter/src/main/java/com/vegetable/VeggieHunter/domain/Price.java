@@ -10,7 +10,7 @@ public class Price extends BaseTime {
     @GeneratedValue
     private Long id;
 
-    private String vegetable_name;
+    private String name;
 
     private Double price;
 

@@ -88,7 +88,7 @@ try:
                     id = 1
 
                 cursor.execute(
-                    "INSERT INTO price (id, vegetable_name, price, unit, created_date, updated_date) VALUES (%s, %s, %s, %s, now(), now())",
+                    "INSERT INTO price (id, name, price, unit, created_date, updated_date) VALUES (%s, %s, %s, %s, now(), now())",
                     (id, veg_name, price_per_unit, unit))
     cursor.close()
 finally:
