@@ -1,10 +1,11 @@
 package com.vegetable.veggiehunter.domain;
 
 import com.vegetable.veggiehunter.constant.Role;
-import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 
 
 @Getter

@@ -1,7 +1,10 @@
 package com.vegetable.veggiehunter.domain;
 
-import jakarta.persistence.*;
 import lombok.Getter;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Entity
 @Getter
