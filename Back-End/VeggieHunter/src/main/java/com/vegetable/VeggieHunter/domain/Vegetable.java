@@ -20,11 +20,10 @@ public class Vegetable {
     @Id
     @GeneratedValue
     private Long id;
-
     private String name;
-
     private String image;
 
+    private String main_unit;
     @Lob
     private String storageMethod;
 
