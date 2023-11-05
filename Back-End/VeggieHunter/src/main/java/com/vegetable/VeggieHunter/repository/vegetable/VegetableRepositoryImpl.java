@@ -11,7 +11,6 @@ import com.vegetable.veggiehunter.dto.response.vegetable.VegetableListResponse;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static com.vegetable.veggiehunter.domain.QPrice.price1;
@@ -27,7 +26,14 @@ public class VegetableRepositoryImpl implements VegetableRepositoryCustom {
 
     @Override
     public List<VegetableListResponse> getVegetableList() {
-        LocalDate yesterdayStart = LocalDate.now().minusDays(1);
+        // 데이터 중 가장 최근 날짜 조회
+        LocalDate mostRecentDate = queryFactory
+                .select(price1.createdDate.max())
+                .from(price1)
+                .fetchOne();
+
+        // 가장 최근 날짜의 어제 날짜 계산
+        LocalDate yesterdayOfMostRecentDate = mostRecentDate.minusDays(1);
 
         // 데이터를 가져오기 위한 메인 쿼리
         return queryFactory
@@ -45,12 +51,14 @@ public class VegetableRepositoryImpl implements VegetableRepositoryCustom {
                                                 .select(price1.price.avg())
                                                 .from(price1)
                                                 .where(price1.unit.eq(vegetable.main_unit)
-                                                        .and(price1.createdDate.eq(yesterdayStart)))
+                                                        .and(price1.createdDate.eq(yesterdayOfMostRecentDate)))
                                 )
                         )
                 )
                 .from(vegetable)
-                .leftJoin(price1).on(price1.unit.eq(vegetable.main_unit).and(price1.createdDate.eq(LocalDate.now())))
+                .leftJoin(price1).on(price1.unit.eq(vegetable.main_unit)
+                        .and(price1.createdDate.eq(mostRecentDate))
+                        .and(price1.name.eq(vegetable.name)))
                 .groupBy(vegetable.name, vegetable.image, vegetable.main_unit)
                 .fetch();
     }
