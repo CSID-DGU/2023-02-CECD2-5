@@ -68,7 +68,7 @@ class GradientBackgroundScreen extends StatelessWidget {
             Center(
               child: InkWell(
                 onTap: () async{
-                  final url = Uri.parse('http://ec2-54-180-36-184.ap-northeast-2.compute.amazonaws.com:8080:8080/oauth2/authorization/naver');
+                  final url = Uri.parse('http://ec2-54-180-36-184.ap-northeast-2.compute.amazonaws.com:8080/login');
                   if (await canLaunchUrl(url)){
                     await launchUrl(url);
                   } else {

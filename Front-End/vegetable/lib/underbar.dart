@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'mainpage.dart';
+import 'vegetablepage.dart';
 
 class CustomBottomBar extends StatelessWidget {
   final int selectedIndex;
@@ -27,7 +29,20 @@ class CustomBottomBar extends StatelessWidget {
         ),
       ],
       currentIndex: selectedIndex,
-      onTap: (index) => onTap(index),
+      onTap: (index) {
+        switch (index) {
+          case 0:
+            Navigator.push(context, MaterialPageRoute(builder: (context) => VegetablePage()));
+            break;
+          case 1:
+            // Navigator.pop을 사용하여 메인 페이지로 돌아가기
+            Navigator.pop(context);
+            break;
+          case 2:
+            Navigator.push(context, MaterialPageRoute(builder: (context) => RecipePage()));
+            break;
+        }
+      }
     );
   }
 }

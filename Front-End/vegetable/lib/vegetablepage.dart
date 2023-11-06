@@ -42,9 +42,7 @@ class _VegetablePageState extends State<VegetablePage> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (context) => MainPage(),
-            ));
+            Navigator.pop(context);
           },
         ),
         actions: [
