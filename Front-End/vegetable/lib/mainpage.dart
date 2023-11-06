@@ -16,36 +16,23 @@ class _MainPageState extends State<MainPage> {
     RecipePage(),
   ];
 
-  Future<bool> _onWillPop() async {
-    if (_selectedIndex != 1) {
-      setState(() {
-        _selectedIndex = 1; // 홈 화면으로 돌아옴
-      });
-      return false; // 현재 화면에서 나가지 않음
-    }
-    return true; // 현재 화면에서 나감
-  }
-
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _onWillPop,
-      child: Scaffold(
-        appBar: AppBar(title: Text("메인 페이지")),
-        body: _widgetOptions[_selectedIndex],
-        bottomNavigationBar: CustomBottomBar(
-          selectedIndex: _selectedIndex,
-          onTap: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          },
-        ),
+    return Scaffold(
+      appBar: AppBar(title: Text("메인 페이지")),
+      body: _widgetOptions[_selectedIndex],
+      bottomNavigationBar: CustomBottomBar(
+        selectedIndex: _selectedIndex,
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        }
+        
       ),
     );
   }
 }
-
 
 
 class RecipePage extends StatelessWidget {

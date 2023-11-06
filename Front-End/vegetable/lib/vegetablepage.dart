@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'underbar.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'mainpage.dart';
 
 Future<List<Map<String, dynamic>>> fetchVegetables() async {
   print("Fetching vegetables from API...");
@@ -40,7 +41,11 @@ class _VegetablePageState extends State<VegetablePage> {
         title: Text("채소 페이지"),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (context) => MainPage(),
+            ));
+          },
         ),
         actions: [
           IconButton(
