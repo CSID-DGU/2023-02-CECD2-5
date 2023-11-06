@@ -1,4 +1,23 @@
 import 'package:flutter/material.dart';
+import 'underbar.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+Future<List<Map<String, dynamic>>> fetchVegetables() async {
+  print("Fetching vegetables from API...");
+
+  final response = await http.get(Uri.parse('http://ec2-54-180-36-184.ap-northeast-2.compute.amazonaws.com:8080/vegetable'));
+
+  if (response.statusCode == 200) {
+    var jsonResponse = json.decode(utf8.decode(response.bodyBytes));
+    return List<Map<String, dynamic>>.from(jsonResponse['data']);
+  } else {
+    print("Error fetching vegetables: ${response.body}");
+    throw Exception('Failed to load vegetables from the server');
+  }
+}
+
+
 
 class VegetablePage extends StatefulWidget {
   @override
@@ -6,11 +25,13 @@ class VegetablePage extends StatefulWidget {
 }
 
 class _VegetablePageState extends State<VegetablePage> {
-  // 임시로 채소 데이터를 만듭니다.
-  List<Map<String, dynamic>> vegetables = List.generate(
-    20,
-    (index) => {'name': '채소$index', 'image': 'assets/temp_image.png'},
-  );
+  int _selectedIndex = 0; // 현재 선택된 하단바 아이템의 인덱스
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,21 +66,69 @@ class _VegetablePageState extends State<VegetablePage> {
           ),
         ],
       ),
-      body: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,  // 2열로 설정합니다.
-        ),
-        itemCount: vegetables.length,
-        itemBuilder: (context, index) {
-          return Column(
-            children: <Widget>[
-              // 실제 이미지를 사용하려면 아래 코드의 'assets/temp_image.png' 경로를 실제 이미지 경로로 변경해야 합니다.
-              Image.asset('assets/temp_image.png', width: 100, height: 100),  // 임시 이미지를 표시합니다.
-              Text(vegetables[index]['name']),  // 채소의 이름을 표시합니다.
-            ],
-          );
+      body: FutureBuilder<List<Map<String, dynamic>>>(
+        future: fetchVegetables(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else {
+            final vegetables = snapshot.data!;
+            return GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 1,
+                childAspectRatio: (MediaQuery.of(context).size.width) / (100 + 16), // 이미지 높이 + 여백
+              ),
+              itemCount: vegetables.length,
+              itemBuilder: (context, index) {
+                final vegetable = vegetables[index];
+                double rate = vegetable['rate'];
+                return Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          flex: 4,
+                          child: Image.network(
+                            vegetable['image'],
+                            fit: BoxFit.contain,
+                            height: 100, // 이미지의 높이를 지정합니다.
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Center(child: Text('${vegetable['name']}',
+                          style: TextStyle(fontSize: 16)),),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text('${vegetable['price'].round()} 원 / ${vegetable['unit']}',
+                              style: TextStyle(fontSize: 16)),
+                              Text(
+                                '${((vegetable['rate'] as double) * 100).toStringAsFixed(2)}%',
+                                style: TextStyle(
+                                  color: rate > 0 ? Colors.red : Colors.blue,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          }
         },
       ),
+      bottomNavigationBar: null
     );
   }
 }

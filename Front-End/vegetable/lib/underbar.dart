@@ -18,8 +18,8 @@ class CustomBottomBar extends StatelessWidget {
           label: '채소',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.circle),
-          label: '',
+          icon: Icon(Icons.home), // 홈 아이콘으로 변경
+          label: '홈', // 레이블을 '홈'으로 변경
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.book),
