@@ -34,6 +34,8 @@ public class VegetableRepositoryImpl implements VegetableRepositoryCustom {
 
         // 가장 최근 날짜의 어제 날짜 계산
         LocalDate yesterdayOfMostRecentDate = mostRecentDate.minusDays(1);
+        System.out.println(mostRecentDate);
+        System.out.println(yesterdayOfMostRecentDate);
 
         return queryFactory
                 .select(
