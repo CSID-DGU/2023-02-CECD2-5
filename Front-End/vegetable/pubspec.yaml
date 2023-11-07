@@ -32,8 +32,6 @@ dependencies:
     sdk: flutter
   flutter_speed_dial: ^4.0.0
   http: ^0.13.3
-  kakao_flutter_sdk: ^1.6.1 # 전체 추가
-  kakao_flutter_sdk_user: ^1.6.1 # 카카오 로그인
 
 
 
@@ -67,7 +65,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/kakao.png
+    - assets/images/naver.png
   
   fonts:
     - family: Pacifico
