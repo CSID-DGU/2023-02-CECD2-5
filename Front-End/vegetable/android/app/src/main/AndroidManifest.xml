@@ -1,7 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.url_launcher_example">
     <uses-permission android:name="android.permission.INTERNET" />
-
     <queries>
         <!-- If your app opens https URLs -->
         <intent>
@@ -24,7 +23,6 @@
             <data android:mimeType="*/*" />
         </intent>
     </queries>
-
     <application
         android:label="vegetable"
         android:name="${applicationName}"
