@@ -1,6 +1,5 @@
 package com.vegetable.veggiehunter.domain;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,10 +16,5 @@ public class User {
 
     private String userName;
 
-    @Builder
-    public User(String userId, String userName) {
-        this.userId = userId;
-        this.userName = userName;
-    }
 
 }
