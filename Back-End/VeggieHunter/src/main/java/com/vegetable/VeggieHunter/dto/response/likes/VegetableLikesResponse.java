@@ -1,4 +1,4 @@
-package com.vegetable.veggiehunter.dto.response.vegetable;
+package com.vegetable.veggiehunter.dto.response.likes;
 
 import com.vegetable.veggiehunter.domain.Price;
 import lombok.AllArgsConstructor;
