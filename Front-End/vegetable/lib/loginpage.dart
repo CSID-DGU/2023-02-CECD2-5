@@ -57,21 +57,24 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> sendUserDataToServer(User user) async {
+    try {
     // 사용자 정보를 스프링 서버에 전송
-    final url = Uri.parse('http://localhost:8080/user');
+    final url = Uri.parse('http://ec2-54-180-36-184.ap-northeast-2.compute.amazonaws.com:8080/user');
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'userId': '${user.id}', 'userName': '${user.kakaoAccount?.profile?.nickname}'}),
     );
-
     if (response.statusCode == 200) {
       print('사용자 정보 전송 성공'
           '\n회원번호: ${user.id}'
           '\n닉네임: ${user.kakaoAccount?.profile?.nickname}');
     } else {
-      print('사용자 정보 전송 실패');
+      print('사용자 정보 전송 실패\nHTTP Status Code: ${response.statusCode}\nResponse Body: ${response.body}');
     }
+  } catch (error) {
+    print('사용자 정보 전송 중 오류 발생: $error');
+  }
   }
 
   void signOut() async {

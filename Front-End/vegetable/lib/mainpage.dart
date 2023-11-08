@@ -31,19 +31,56 @@ class _MainPageState extends State<MainPage> {
     RecipePage(),
   ];
 
+    void _selectedMenuItem(int item) {
+    // 실행기능 추가 필요
+    switch (item) {
+      case 1:
+        print('찜한 목록');
+        // TODO: 찜한 목록 페이지로 이동
+        break;
+      case 2:
+        print('마이페이지');
+        // TODO: 마이페이지로 이동
+        break;
+      default:
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("메인 페이지")),
+      appBar: AppBar(
+        title: Text(""),
+        backgroundColor: Color.fromARGB(255, 118, 191, 126),
+        actions: <Widget>[
+          PopupMenuButton<int>(
+            onSelected: _selectedMenuItem,
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
+              const PopupMenuItem<int>(
+                value: 1,
+                child: Text('찜한 목록'),
+                ),
+              const PopupMenuItem<int>(
+                value: 2,
+                child: Text('마이페이지'),
+              ),
+            ],
+            icon: Icon(
+              Icons.menu,
+              size: 30
+            ),
+          )
+        ]
+      ),
       body: _widgetOptions[_selectedIndex],
       bottomNavigationBar: CustomBottomBar(
         selectedIndex: _selectedIndex,
         onTap: (index) {
           setState(() {
             _selectedIndex = index;
-          });
+            }
+          );
         }
-        
       ),
     );
   }
