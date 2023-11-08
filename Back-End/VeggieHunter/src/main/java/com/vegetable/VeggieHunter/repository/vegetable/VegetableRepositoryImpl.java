@@ -7,6 +7,7 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.vegetable.veggiehunter.domain.Price;
 import com.vegetable.veggiehunter.domain.Vegetable;
+import com.vegetable.veggiehunter.dto.response.vegetable.VegetableGraphResponse;
 import com.vegetable.veggiehunter.dto.response.vegetable.VegetableListResponse;
 
 import javax.persistence.EntityManager;
@@ -105,6 +106,33 @@ public class VegetableRepositoryImpl implements VegetableRepositoryCustom {
                         .and(price1.createdDate.eq(mostRecentDate))
                         .and(price1.name.eq(vegetable.name)))
                 .groupBy(vegetable.name, vegetable.image, vegetable.main_unit)
+                .fetch();
+    }
+
+    @Override
+    public List<VegetableGraphResponse> getVegetableGraphList(Long vegetableId) {
+        String vegetableName = queryFactory
+                .select(vegetable.name)
+                .from(vegetable)
+                .where(vegetable.id.eq(vegetableId))
+                .fetchOne();
+
+        LocalDate recentDate = queryFactory
+                .select(price1.createdDate.max())
+                .from(price1)
+                .fetchOne();
+
+        return queryFactory
+                .select(Projections.constructor(
+                        VegetableGraphResponse.class,
+                        price1.unit,
+                        price1.createdDate,
+                        price1.price.avg()
+                ))
+                .from(price1)
+                .where(price1.name.eq(vegetableName)
+                        .and(price1.createdDate.between(recentDate.minusDays(6), recentDate)))
+                .groupBy(price1.name, price1.unit, price1.createdDate)
                 .fetch();
     }
 }
