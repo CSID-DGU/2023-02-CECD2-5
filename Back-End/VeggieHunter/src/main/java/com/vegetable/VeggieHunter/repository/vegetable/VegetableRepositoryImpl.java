@@ -41,6 +41,7 @@ public class VegetableRepositoryImpl implements VegetableRepositoryCustom {
                 .select(
                         Projections.constructor(
                                 VegetableListResponse.class,
+                                vegetable.id,
                                 vegetable.name,
                                 vegetable.image,
                                 vegetable.main_unit,
@@ -58,6 +59,48 @@ public class VegetableRepositoryImpl implements VegetableRepositoryCustom {
                         )
                 )
                 .from(vegetable)
+                .leftJoin(price1).on(price1.unit.eq(vegetable.main_unit)
+                        .and(price1.createdDate.eq(mostRecentDate))
+                        .and(price1.name.eq(vegetable.name)))
+                .groupBy(vegetable.name, vegetable.image, vegetable.main_unit)
+                .fetch();
+    }
+
+    @Override
+    public List<VegetableListResponse> getVegetableList(List<Long> vegetableIdList) {
+        LocalDate mostRecentDate = queryFactory
+                .select(price1.createdDate.max())
+                .from(price1)
+                .fetchOne();
+
+        // 가장 최근 날짜의 어제 날짜 계산
+        LocalDate yesterdayOfMostRecentDate = mostRecentDate.minusDays(1);
+        System.out.println(mostRecentDate);
+        System.out.println(yesterdayOfMostRecentDate);
+
+        return queryFactory
+                .select(
+                        Projections.constructor(
+                                VegetableListResponse.class,
+                                vegetable.id,
+                                vegetable.name,
+                                vegetable.image,
+                                vegetable.main_unit,
+                                price1.price.avg(),
+                                Expressions.numberTemplate(Double.class,
+                                        "({0} - coalesce({1}, 0)) / coalesce({1}, 1)",
+                                        price1.price.avg(),
+                                        JPAExpressions
+                                                .select(price1.price.avg())
+                                                .from(price1)
+                                                .where(price1.unit.eq(vegetable.main_unit)
+                                                        .and(price1.createdDate.eq(yesterdayOfMostRecentDate))
+                                                        .and(price1.name.eq(vegetable.name)))
+                                )
+                        )
+                )
+                .from(vegetable)
+                .where(vegetable.id.in(vegetableIdList))
                 .leftJoin(price1).on(price1.unit.eq(vegetable.main_unit)
                         .and(price1.createdDate.eq(mostRecentDate))
                         .and(price1.name.eq(vegetable.name)))

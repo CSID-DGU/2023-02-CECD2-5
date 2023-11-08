@@ -24,8 +24,8 @@ public class UserController {
 
     // 사용자 정보 저장 API
     @PostMapping
-    public CommonResponse.GeneralResponse signUp(@RequestBody User user, HttpServletResponse response) {
-        userService.signUp(user, response);
+    public CommonResponse.GeneralResponse signUp(@RequestBody User user) {
+        userService.signUp(user);
 
         return responseService.getGeneralResponse(HttpStatus.OK.value(), "User request completed");
     }

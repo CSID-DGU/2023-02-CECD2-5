@@ -18,8 +18,8 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void signUp(User user, HttpServletResponse response) {
-        Optional<Object> findUser = userRepository.findByUserId(user.getUserId());
+    public void signUp(User user) {
+        Optional<User> findUser = userRepository.findByUserId(user.getUserId());
         if (findUser.isEmpty()) {
             userRepository.save(user);
         }
