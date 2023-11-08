@@ -130,9 +130,10 @@ class _VegetablePageState extends State<VegetablePage> {
                                 Padding(
                                   padding: const EdgeInsets. only(right: 20.0),
                                   child: Text(
-                                    '${((vegetable['rate'] as double) * 100).toStringAsFixed(2)}%',
-                                    style: TextStyle(fontSize: 18,
-                                    color: rate > 0 ? Colors.red : Colors.blue,
+                                    '${(rate > 0 ? '+' : '')}${((vegetable['rate'] as double) * 100).toStringAsFixed(2)}%',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: rate > 0 ? Colors.red : (rate == 0 ? Colors.black : Colors.blue),
                                     ),
                                   ),
                                 ),
