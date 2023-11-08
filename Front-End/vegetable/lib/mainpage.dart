@@ -1,33 +1,29 @@
 import 'package:flutter/material.dart';
 import 'vegetablepage.dart';
 import 'underbar.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'dart:io';
-import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: MainPage(),
+      theme: ThemeData(
+        // BMHANNAPro 글씨체를 앱의 기본 글씨체로 설정
+        fontFamily: 'NotoSansKR-Bold',
+      ),
+    );
+  }
+}
 
 class MainPage extends StatefulWidget {
   @override
   _MainPageState createState() => _MainPageState();
-  
-  
 }
 
 class _MainPageState extends State<MainPage> {
-  @override
-  void initState () {
-    fetchUser();
-    super.initState ();
-  }
   int _selectedIndex = 1;
-
-  void fetchUser() async{
-    User? user;
-    user = await UserApi.instance.me();
-    print('사용자 정보 불러오기 성공'
-          '\n회원번호: ${user.id}'
-          '\n닉네임: ${user.kakaoAccount?.profile?.nickname}');
-  }
 
   final List<Widget> _widgetOptions = [
     VegetablePage(),
@@ -168,4 +164,4 @@ class MainContent extends StatelessWidget {
   }
 }
 
-void main() => runApp(MaterialApp(home: MainPage()));
+//void main() => runApp(MaterialApp(home: MainPage()));

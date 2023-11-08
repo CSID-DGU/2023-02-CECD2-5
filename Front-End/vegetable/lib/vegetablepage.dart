@@ -38,9 +38,13 @@ class _VegetablePageState extends State<VegetablePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("채소 페이지"),
+        title: Text("채소",
+        style: TextStyle(color: Colors.black,
+        fontSize: 20),
+        ),
+        backgroundColor: Colors.white,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back_ios_new, color: Colors.black,),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -82,49 +86,71 @@ class _VegetablePageState extends State<VegetablePage> {
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 1,
                 childAspectRatio: (MediaQuery.of(context).size.width) / (100 + 16), // 이미지 높이 + 여백
+                
               ),
               itemCount: vegetables.length,
               itemBuilder: (context, index) {
                 final vegetable = vegetables[index];
                 double rate = vegetable['rate'];
-                return Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          flex: 4,
-                          child: Image.network(
-                            vegetable['image'],
-                            fit: BoxFit.contain,
-                            height: 100, // 이미지의 높이를 지정합니다.
-                          ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: Center(child: Text('${vegetable['name']}',
-                          style: TextStyle(fontSize: 16)),),
-                        ),
-                        Expanded(
-                          flex: 3,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text('${vegetable['price'].round()} 원 / ${vegetable['unit']}',
-                              style: TextStyle(fontSize: 16)),
-                              Text(
-                                '${((vegetable['rate'] as double) * 100).toStringAsFixed(2)}%',
-                                style: TextStyle(
-                                  color: rate > 0 ? Colors.red : Colors.blue,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                return Container(
+                  decoration: BoxDecoration(
+                    border: Border(bottom: BorderSide(color: Colors.grey[300]!, width: 1),
                     ),
                   ),
+                  child: Card(
+                    margin: EdgeInsets.zero,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 0.0, top: 12.0, right: 8.0, bottom: 12.0),
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            flex: 4,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Image.network(
+                              vegetable['image'],
+                              fit: BoxFit.contain,
+                              height: 100, // 이미지의 높이를 지정합니다.
+                            ),
+                          ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Text('${vegetable['name']}',
+                              style: TextStyle(fontSize: 20)),),
+                          ),
+                          Expanded(
+                            flex: 4,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets. only(right: 20.0),
+                                  child: Text(
+                                    '${((vegetable['rate'] as double) * 100).toStringAsFixed(2)}%',
+                                    style: TextStyle(fontSize: 18,
+                                    color: rate > 0 ? Colors.red : Colors.blue,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 20.0),
+                                  child: Text(
+                                    '${vegetable['price'].round()}원 / ${vegetable['unit']}',
+                                    style: TextStyle(
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
                 );
               },
             );

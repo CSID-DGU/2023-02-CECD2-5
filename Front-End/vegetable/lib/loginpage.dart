@@ -34,7 +34,6 @@ class _LoginPageState extends State<LoginPage> {
           HttpHeaders.authorizationHeader: 'Bearer ${token.accessToken}'
         },
       );
-      print("access token ${token.accessToken}");
       
       final profileInfo = json.decode(response.body);
       print(profileInfo.toString());
@@ -59,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> sendUserDataToServer(User user) async {
     // 사용자 정보를 스프링 서버에 전송
-    final url = Uri.parse('http://ec2-54-180-36-184.ap-northeast-2.compute.amazonaws.com:8080/user');
+    final url = Uri.parse('http://localhost:8080/user');
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
