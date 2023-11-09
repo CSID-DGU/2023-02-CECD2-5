@@ -158,7 +158,10 @@ class _VegetablePageState extends State<VegetablePage> {
           }
         },
       ),
-      bottomNavigationBar: null
+      bottomNavigationBar: CustomBottomBar(
+        selectedIndex:  _selectedIndex,
+        onTap: _onItemTapped,
+      ),
     );
   }
 }
