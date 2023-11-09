@@ -1,4 +1,3 @@
-// vegetablepage.dart
 import 'package:flutter/material.dart';
 import 'package:vegetable/vegetable_detail.dart';
 import 'dart:convert';
