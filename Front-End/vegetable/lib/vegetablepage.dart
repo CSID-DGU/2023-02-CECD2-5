@@ -1,13 +1,16 @@
+// vegetablepage.dart
 import 'package:flutter/material.dart';
-import 'underbar.dart';
+import 'package:vegetable/vegetable_detail.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'mainpage.dart';
+import 'underbar.dart';
+import 'menu.dart';
 
 Future<List<Map<String, dynamic>>> fetchVegetables() async {
-  print("Fetching vegetables from API...");
-
-  final response = await http.get(Uri.parse('http://ec2-54-180-36-184.ap-northeast-2.compute.amazonaws.com:8080/vegetable'));
+  final response = await http.get(
+    Uri.parse('http://ec2-54-180-36-184.ap-northeast-2.compute.amazonaws.com:8080/vegetable'),
+  );
 
   if (response.statusCode == 200) {
     var jsonResponse = json.decode(utf8.decode(response.bodyBytes));
@@ -18,60 +21,38 @@ Future<List<Map<String, dynamic>>> fetchVegetables() async {
   }
 }
 
-
-
 class VegetablePage extends StatefulWidget {
   @override
   _VegetablePageState createState() => _VegetablePageState();
 }
 
 class _VegetablePageState extends State<VegetablePage> {
-  int _selectedIndex = 0; // 현재 선택된 하단바 아이템의 인덱스
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("채소",
-        style: TextStyle(color: Colors.black,
-        fontSize: 20),
+        title: Text(
+          "채소",
+          style: TextStyle(color: Colors.black, fontSize: 20),
         ),
+        
         backgroundColor: Colors.white,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new, color: Colors.black,),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          icon: Icon(Icons.arrow_back_ios_new, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
         ),
-        actions: [
+        actions: <Widget>[
+          
           IconButton(
-            icon: Icon(Icons.search),
+            icon: Icon(Icons.search, color: Colors.black),
             onPressed: () {
               // 검색 기능을 여기에 추가합니다.
             },
           ),
-          PopupMenuButton(
-            onSelected: (value) {
-              // 선택한 항목에 따른 작업을 처리합니다.
-            },
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                value: 1,
-                child: Text("옵션 1"),
-              ),
-              PopupMenuItem(
-                value: 2,
-                child: Text("옵션 2"),
-              ),
-            ],
-          ),
-        ],
+          buildPopupMenuButton(context),
+        ]
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: fetchVegetables(),
@@ -85,19 +66,31 @@ class _VegetablePageState extends State<VegetablePage> {
             return GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 1,
-                childAspectRatio: (MediaQuery.of(context).size.width) / (100 + 16), // 이미지 높이 + 여백
-                
+                childAspectRatio: (MediaQuery.of(context).size.width) / (100 + 16),
               ),
               itemCount: vegetables.length,
               itemBuilder: (context, index) {
                 final vegetable = vegetables[index];
                 double rate = vegetable['rate'];
-                return Container(
-                  decoration: BoxDecoration(
-                    border: Border(bottom: BorderSide(color: Colors.grey[300]!, width: 1),
+                int vegetableId = vegetable['id'];
+                return GestureDetector(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => VegetableDetailPage(
+                        vegetableId: vegetableId,
+                        price: vegetable['price'],
+                        unit: vegetable['unit'].toString(),
+                        ),
                     ),
                   ),
-                  child: Card(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(color: Colors.grey[300]!, width: 1),
+                      ),
+                    ),
+                    child: Card(
                     margin: EdgeInsets.zero,
                     child: Padding(
                       padding: const EdgeInsets.only(left: 0.0, top: 12.0, right: 8.0, bottom: 12.0),
@@ -145,13 +138,14 @@ class _VegetablePageState extends State<VegetablePage> {
                                     ),
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
+                        ]
                     ),
-                  )
+                  ),
+                ),
+                  ),
                 );
               },
             );
@@ -159,9 +153,17 @@ class _VegetablePageState extends State<VegetablePage> {
         },
       ),
       bottomNavigationBar: CustomBottomBar(
-        selectedIndex:  _selectedIndex,
-        onTap: _onItemTapped,
+        selectedIndex: _selectedIndex,
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
       ),
     );
   }
 }
+
+// vegetable_detail.dart
+// 상세 페이지 구현
+// 이 부분에 VegetableDetailPage 위젯을 구현합니다.

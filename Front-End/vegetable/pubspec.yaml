@@ -34,6 +34,7 @@ dependencies:
   http: ^0.13.3
   kakao_flutter_sdk: ^1.6.1 # 전체 추가
   kakao_flutter_sdk_user: ^1.6.1 # 카카오 로그인
+  fl_chart: ^0.36.0
 
 
 
