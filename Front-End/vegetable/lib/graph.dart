@@ -13,15 +13,41 @@ class VegetableGraph extends StatefulWidget {
 }
 
 class _VegetableGraphState extends State<VegetableGraph> {
-  late Future<Map<String, double>> chartData;
+  String selectedUnit = '';
+  List<String> units = [];
+  Future<Map<String, double>>? chartData;
+
 
   @override
   void initState() {
     super.initState();
-    chartData = fetchDataForUnit(widget.vegetableId);
+    fetchDataUnits().then((_) {
+      if (units.isNotEmpty) {
+        setState(() {
+          selectedUnit = units.first;
+          chartData = fetchDataForUnit(widget.vegetableId, selectedUnit);
+        });
+      }
+    });
   }
 
-  Future<Map<String, double>> fetchDataForUnit(int id) async {
+  Future<void> fetchDataUnits() async {
+    var url = Uri.parse('http://ec2-54-180-36-184.ap-northeast-2.compute.amazonaws.com:8080/vegetable/${widget.vegetableId}/graph');
+    var response = await http.get(url);
+    
+    if (response.statusCode == 200) {
+      var jsonResponse = json.decode(utf8.decode(response.bodyBytes));
+      // 'data' 리스트 내의 모든 'unit' 값을 추출하여 중복을 제거합니다.
+      units = jsonResponse['data']
+          .map<String>((item) => item['unit'] as String)
+          .toSet()
+          .toList();
+    } else {
+      throw Exception('Failed to load units');
+    }
+  }
+
+  Future<Map<String, double>> fetchDataForUnit(int id, String unit) async {
   var url = Uri.parse('http://ec2-54-180-36-184.ap-northeast-2.compute.amazonaws.com:8080/vegetable/$id/graph');
   print('Fetching graph data from: $url');
 
@@ -30,54 +56,71 @@ class _VegetableGraphState extends State<VegetableGraph> {
     print('Response status: ${response.statusCode}');
     print('Response body: ${response.body}');
 
-    if (response.statusCode == 200) {
-      var jsonResponse = json.decode(utf8.decode(response.bodyBytes));
-      var decodedResponse = json.decode(response.body);
-      print('Decoded response: $decodedResponse');
-
-      if (decodedResponse['success'] == true && decodedResponse['data'] != null) {
-        List<dynamic> responseData = decodedResponse['data'];
+      if (response.statusCode == 200) {
+        var jsonResponse = json.decode(utf8.decode(response.bodyBytes));
+        List<dynamic> responseData = jsonResponse['data'];
         Map<String, double> data = {};
-        
+
         for (var item in responseData) {
-          String date = item['date'];
-          double price = item['price']?.toDouble() ?? 0.0;
-          data[date] = price;
+          if (item['unit'] == unit) {  // 선택된 유닛에 맞는 데이터만 필터링
+            String date = item['date'];
+            double price = item['price']?.toDouble() ?? 0.0;
+            data[date] = price;
+          }
         }
 
         return data;
       } else {
         throw Exception('Invalid data format');
       }
-    } else {
-      throw Exception('Failed to fetch data from the server');
+    } catch (e) {
+      print('Error fetching data: $e');
+      rethrow;
     }
-  } catch (e) {
-    print('Error fetching data: $e');
-    rethrow;  // 오류를 상위로 전파
   }
-}
 
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Map<String, double>>(
-      future: chartData,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          // 데이터 로딩 중
-          return CircularProgressIndicator();
-        } else if (snapshot.hasError) {
-          // 오류 발생
-          return Text("Error: ${snapshot.error}");
-        } else if (snapshot.hasData) {
-          // 데이터가 로드되었을 때만 차트 그리기
-          return MyLineChart(data: snapshot.data!);
-        } else {
-          // 데이터 없음
-          return Text("No data available");
-        }
-      },
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // 유닛 선택 버튼
+
+        
+        // 그래프 표시
+        Flexible(
+          fit: FlexFit.loose,
+          child: FutureBuilder<Map<String, double>>(
+            future: chartData,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                return Text("Error: ${snapshot.error}");
+              } else if (snapshot.hasData) {
+                return Container(
+                  height: 300.0,
+                  child: MyLineChart(data: snapshot.data!),
+                );
+              } else {
+                return Text("No data available");
+              }
+            },
+          ),
+        ),
+                if (units.isNotEmpty)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: units.map((unit) => ElevatedButton(
+              onPressed: () => setState(() {
+                selectedUnit = unit;
+                chartData = fetchDataForUnit(widget.vegetableId, unit);
+              }),
+              child: Text(unit),
+            )).toList(),
+          ),
+      ],
     );
   }
 }
@@ -127,7 +170,7 @@ class MyLineChart extends StatelessWidget {
     minY -= interval;
     print('min, Max = $minY, $maxY');
     return Padding(
-      padding: const EdgeInsets.all(30.0),
+      padding: const EdgeInsets.only(top: 0, bottom: 0, left: 20, right: 50),
       child: Container(
         height: 300.0,
 
@@ -150,7 +193,7 @@ class MyLineChart extends StatelessWidget {
               ),
               leftTitles: SideTitles(
                 showTitles: true,
-                reservedSize: 40,
+                reservedSize: 50,
                 interval: interval, // y축 간격 설정 (예: 500 단위마다 레이블 표시)
                 getTitles: (value) {
                   return value.toStringAsFixed(0); // y축 레이블 포맷
