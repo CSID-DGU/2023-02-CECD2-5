@@ -138,7 +138,7 @@ class _VegetableDetailPageState extends State<VegetableDetailPage> {
                     ),
                   ],
                 ),
-                
+                VegetableGraph(vegetableId: widget.vegetableId),
                 Padding(
                   
                   padding: const EdgeInsets.all(8.0),
@@ -147,12 +147,7 @@ class _VegetableDetailPageState extends State<VegetableDetailPage> {
                     style: TextStyle(fontSize: 16, fontFamily: 'SOYO_Maple_Regular'),
                   ),
                 ),
-                processedGraphData.isNotEmpty
-                    ? Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: MyLineChart(data: processedGraphData),
-                      )
-                    : CircularProgressIndicator(),
+                
               ],
             );
           }

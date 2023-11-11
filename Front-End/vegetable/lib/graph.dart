@@ -3,116 +3,81 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-void main() => runApp(MyLineChartTestApp());
+class VegetableGraph extends StatefulWidget {
+  final int vegetableId;
 
-class MyLineChartTestApp extends StatefulWidget {
+  VegetableGraph({Key? key, required this.vegetableId}) : super(key: key);
+
   @override
-  _MyLineChartTestAppState createState() => _MyLineChartTestAppState();
+  _VegetableGraphState createState() => _VegetableGraphState();
 }
 
-class _MyLineChartTestAppState extends State<MyLineChartTestApp> {
-  String selectedUnit = '';
-  List<String> units = [];
-  Future<Map<String, double>>? chartData;
+class _VegetableGraphState extends State<VegetableGraph> {
+  late Future<Map<String, double>> chartData;
 
   @override
   void initState() {
     super.initState();
-    initializeChartData();
+    chartData = fetchDataForUnit(widget.vegetableId);
   }
 
-  void initializeChartData() async {
-    await fetchDataUnits();
-    if (units.isNotEmpty) {
-      setState(() {
-        selectedUnit = units.first;
-        chartData = fetchDataForUnit(selectedUnit);
-      });
-    }
-  }
+  Future<Map<String, double>> fetchDataForUnit(int id) async {
+  var url = Uri.parse('http://ec2-54-180-36-184.ap-northeast-2.compute.amazonaws.com:8080/vegetable/$id/graph');
+  print('Fetching graph data from: $url');
 
-  Future<void> fetchDataUnits() async {
-    var url = Uri.parse('http://ec2-54-180-36-184.ap-northeast-2.compute.amazonaws.com:8080/vegetable/5/graph');
+  try {
     var response = await http.get(url);
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
 
     if (response.statusCode == 200) {
-      var decodedString = utf8.decode(response.bodyBytes);
+      var jsonResponse = json.decode(utf8.decode(response.bodyBytes));
       var decodedResponse = json.decode(response.body);
+      print('Decoded response: $decodedResponse');
+
       if (decodedResponse['success'] == true && decodedResponse['data'] != null) {
         List<dynamic> responseData = decodedResponse['data'];
-        units = responseData.map((item) => item['unit'] as String).toSet().toList();
-      }
-    } else {
-      throw Exception('Failed to load data');
-    }
-  }
-
-  Future<Map<String, double>> fetchDataForUnit(String unit) async {
-    var url = Uri.parse('http://ec2-54-180-36-184.ap-northeast-2.compute.amazonaws.com:8080/vegetable/5/graph');
-    var response = await http.get(url);
-
-    Map<String, double> data = {};
-    if (response.statusCode == 200) {
-      var decodedString = utf8.decode(response.bodyBytes);
-      var decodedResponse = json.decode(response.body);
-      if (decodedResponse['success'] == true && decodedResponse['data'] != null) {
-        List<dynamic> responseData = decodedResponse['data'];
+        Map<String, double> data = {};
+        
         for (var item in responseData) {
-          if (item['unit'] == unit) {
-            String date = item['date'];
-            double price = item['price']?.toDouble() ?? 0.0;
-            data[date] = price;
-          }
+          String date = item['date'];
+          double price = item['price']?.toDouble() ?? 0.0;
+          data[date] = price;
         }
+
+        return data;
+      } else {
+        throw Exception('Invalid data format');
       }
     } else {
-      throw Exception('Failed to load data');
+      throw Exception('Failed to fetch data from the server');
     }
-    return data;
+  } catch (e) {
+    print('Error fetching data: $e');
+    rethrow;  // 오류를 상위로 전파
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Line Chart Test'),
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Expanded(
-                child: chartData != null
-                  ? FutureBuilder(
-                      future: chartData,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return CircularProgressIndicator();
-                        } else if (snapshot.hasError) {
-                          return Text("Error: ${snapshot.error}");
-                        } else {
-                          return MyLineChart(data: snapshot.data as Map<String, double>);
-                        }
-                      },
-                    )
-                  : CircularProgressIndicator(),
-              ),
-              if (units.isNotEmpty)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: units.map((unit) => ElevatedButton(
-                    onPressed: () => setState(() {
-                      selectedUnit = unit;
-                      chartData = fetchDataForUnit(unit);
-                    }),
-                    child: Text(unit),
-                  )).toList(),
-                ),
-            ],
-          ),
-        ),
-      ),
+    return FutureBuilder<Map<String, double>>(
+      future: chartData,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // 데이터 로딩 중
+          return CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          // 오류 발생
+          return Text("Error: ${snapshot.error}");
+        } else if (snapshot.hasData) {
+          // 데이터가 로드되었을 때만 차트 그리기
+          return MyLineChart(data: snapshot.data!);
+        } else {
+          // 데이터 없음
+          return Text("No data available");
+        }
+      },
     );
   }
 }
@@ -135,7 +100,7 @@ class MyLineChart extends StatelessWidget {
         dateTitles[index.toDouble()] = "${date.month}/${date.day}";
         index++;
       } catch (e) {
-        // 오류 처리: 잘못된 날짜 형식 등
+        print('Error parsing date: $e');
       }
     });
 
@@ -147,7 +112,8 @@ class MyLineChart extends StatelessWidget {
           return FlSpot(dataIndex.toDouble(), entry.value);
         }
       } catch (e) {
-        // 오류 처리
+        print('Error creating FlSpot: $e');
+        return null;
       }
       return null;
     }).where((spot) => spot != null).cast<FlSpot>().toList();
@@ -159,37 +125,41 @@ class MyLineChart extends StatelessWidget {
 
     maxY += interval;
     minY -= interval;
-
+    print('min, Max = $minY, $maxY');
     return Padding(
       padding: const EdgeInsets.all(30.0),
-      child: LineChart(
-        LineChartData(
-          // 나머지 차트 설정 코드...
-          lineBarsData: [
-            LineChartBarData(
-              spots: spots,
-              // 기타 설정...
-            ),
-          ],
-          titlesData: FlTitlesData(
-            bottomTitles: SideTitles(
-              showTitles: true,
-              reservedSize: 22,
-              getTitles: (value) {
-                return dateTitles[value] ?? '';
-              },
-            ),
-            leftTitles: SideTitles(
-              showTitles: true,
-              reservedSize: 40,
-              interval: interval, // y축 간격 설정 (예: 500 단위마다 레이블 표시)
-              getTitles: (value) {
-                return value.toStringAsFixed(0); // y축 레이블 포맷
-              },
-            ),
-          ), 
-          minY: minY,
-          maxY: maxY,           
+      child: Container(
+        height: 300.0,
+
+        child: LineChart(
+          LineChartData(
+            // 나머지 차트 설정 코드...
+            lineBarsData: [
+              LineChartBarData(
+                spots: spots,
+                // 기타 설정...
+              ),
+            ],
+            titlesData: FlTitlesData(
+              bottomTitles: SideTitles(
+                showTitles: true,
+                reservedSize: 22,
+                getTitles: (value) {
+                  return dateTitles[value] ?? '';
+                },
+              ),
+              leftTitles: SideTitles(
+                showTitles: true,
+                reservedSize: 40,
+                interval: interval, // y축 간격 설정 (예: 500 단위마다 레이블 표시)
+                getTitles: (value) {
+                  return value.toStringAsFixed(0); // y축 레이블 포맷
+                },
+              ),
+            ), 
+            minY: minY,
+            maxY: maxY,           
+          ),
         ),
       ),
     );
