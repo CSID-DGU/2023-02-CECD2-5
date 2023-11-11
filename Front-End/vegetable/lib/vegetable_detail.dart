@@ -68,7 +68,7 @@ final data = snapshot.data!['data'];
           return ListView(
             children: [
               ListTile(
-                title: Text(data['name'], style: TextStyle(fontSize: 24)),
+                title: Text(data['name'], style: TextStyle(fontSize: 24, fontFamily: 'SOYO_Maple_Bold')),
                 trailing: IconButton(
                   icon: Icon(Icons.favorite_border),
                   onPressed: () {
@@ -94,7 +94,7 @@ final data = snapshot.data!['data'];
                       alignment: Alignment.center,
                       child: Text(
                         '${widget.price}원 / ${widget.unit}',
-                        style: TextStyle(fontSize: 20),
+                        style: TextStyle(fontSize: 20, fontFamily: 'SOYO_Maple_Bold',),
                       ),
                     ),
                   ),
@@ -103,9 +103,10 @@ final data = snapshot.data!['data'];
               // 레시피 섹션
               Padding(
                 padding: const EdgeInsets.all(8.0),
+                
                 child: Text(
-                  '보관법:\n${data['storageMethod']}',
-                  style: TextStyle(fontSize: 16),
+                  '보관법\n\n${data['storageMethod']}',
+                  style: TextStyle(fontSize: 16, fontFamily: 'SOYO_Maple_Regular',),
                 ),
               ),
               // 추가기능구현위치

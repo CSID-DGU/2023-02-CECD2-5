@@ -22,7 +22,7 @@ public class VegetableLikeController {
         return ResponseEntity.ok().body(vegetableLikesService.getLikesByUserId(user.getUserId()));
     }
 
-    @GetMapping("/{vegetableId}")
+    @PostMapping("/isLikes/{vegetableId}")
     public ResponseEntity<CommonResponse> getIsLikesByUserIdAndVegetableId(@RequestBody User user, @PathVariable Long vegetableId) {
         System.out.println(user.getUserId());
         System.out.println(user.getUserName());

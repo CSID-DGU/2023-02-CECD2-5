@@ -92,6 +92,21 @@ flutter:
     - family: NotoSansKR-Bold
       fonts:
         - asset: assets/fonts/NotoSansKR-Bold.ttf
+    - family: itim
+      fonts:
+        - asset: assets/fonts/itim-Regular.ttf
+    - family: AbrilFatface
+      fonts:
+        - asset: assets/fonts/AbrilFatface-Regular.ttf
+    - family: SOYO_Maple_Regular
+      fonts:
+        - asset: assets/fonts/SOYO_Maple_Regular.ttf
+    - family: SOYO_Maple_Bold
+      fonts:
+        - asset: assets/fonts/SOYO_Maple_Bold.ttf
+    - family: RighteousRegular
+      fonts:
+        - asset: assets/fonts/Righteous_Regular.ttf
 
         
 

@@ -20,6 +20,7 @@ class CustomBottomBar extends StatelessWidget {
         BottomNavigationBarItem(
           icon: Icon(Icons.local_florist, size: 35),
           label: '채소',
+          
         ),
 BottomNavigationBarItem(
   icon: Stack(

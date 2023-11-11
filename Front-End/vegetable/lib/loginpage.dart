@@ -95,8 +95,9 @@ class _LoginPageState extends State<LoginPage> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color.fromARGB(214, 153, 226, 156),
-              Color.fromARGB(159, 220, 166, 81),
+              Color.fromARGB(160, 180, 245, 187),
+              Color.fromARGB(255, 104, 204, 170),
+              Color.fromARGB(255, 104, 204, 170)
             ],
           ),
         ),
@@ -108,13 +109,13 @@ class _LoginPageState extends State<LoginPage> {
             Text(
               "Veggie Hunter",
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white, fontFamily: 'Pacifico', fontSize: 50),
+              style: TextStyle(color: Colors.white, fontFamily: 'RighteousRegular', fontSize: 50),
             ),
             Center(
               child: Container(
                 width: 250,
                 height: 45,
-                margin: const EdgeInsets.only(top: 20),
+                margin: const EdgeInsets.only(top: 20 ),
                 decoration: BoxDecoration(
                   color: Colors.transparent,
                   border: Border.all(color: Colors.white, width: 2.0),
@@ -124,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Text(
                   "환영합니다",
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.white, fontSize: 25),
+                  style: TextStyle(color: Colors.white, fontFamily:'SOYO_Maple_Bold', fontSize: 25),
                 ),
               ),
             ),

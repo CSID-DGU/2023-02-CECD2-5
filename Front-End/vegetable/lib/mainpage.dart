@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
       home: MainPage(),
       theme: ThemeData(
         // BMHANNAPro 글씨체를 앱의 기본 글씨체로 설정
-        fontFamily: 'NotoSansKR-Bold',
+        fontFamily: 'SOYO_Maple_Bold',
       ),
     );
   }
@@ -95,7 +95,7 @@ class MainContent extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("가장 많이 본 채소 TOP 10", style: TextStyle(fontSize: 20.0)),
+                    Text("가장 많이 본 채소 TOP 10", style: TextStyle(fontSize: 20.0, fontFamily: 'SOYO_Maple_Bold',)),
                     InkWell(
                       onTap: () {
                         Navigator.push(
@@ -105,7 +105,7 @@ class MainContent extends StatelessWidget {
                       },
                       child: Text(
                         "더보기",
-                        style: TextStyle(color: Colors.grey[400], fontSize: 13),
+                        style: TextStyle(color: Colors.grey[400], fontSize: 13, fontFamily: 'SOYO_Maple_Regular',),
                       ),
                     ),
                   ],
@@ -136,7 +136,7 @@ class MainContent extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("가장 많이 본 레시피 TOP 10", style: TextStyle(fontSize: 20.0)),
+                    Text("가장 많이 본 레시피 TOP 10", style: TextStyle(fontSize: 20.0, fontFamily: 'SOYO_Maple_Bold',)),
                     InkWell(
                       onTap: () {
                         Navigator.push(
@@ -146,7 +146,7 @@ class MainContent extends StatelessWidget {
                       },
                       child: Text(
                         "더보기",
-                        style: TextStyle(color: Colors.grey[400], fontSize: 13),
+                        style: TextStyle(color: Colors.grey[400], fontSize: 13, fontFamily: 'SOYO_Maple_Regular',),
                       ),
                     ),
                   ],

@@ -34,7 +34,7 @@ class _VegetablePageState extends State<VegetablePage> {
       appBar: AppBar(
         title: Text(
           "채소",
-          style: TextStyle(color: Colors.black, fontSize: 20),
+          style: TextStyle(color: Colors.black, fontSize: 20, fontFamily: 'SOYO_Maple_Bold'),
         ),
         
         backgroundColor: Colors.white,
@@ -111,7 +111,7 @@ class _VegetablePageState extends State<VegetablePage> {
                             child: Align(
                               alignment: Alignment.center,
                               child: Text('${vegetable['name']}',
-                              style: TextStyle(fontSize: 20)),),
+                              style: TextStyle(fontSize: 20, fontFamily: 'SOYO_Maple_Bold',)),),
                           ),
                           Expanded(
                             flex: 4,
@@ -125,6 +125,7 @@ class _VegetablePageState extends State<VegetablePage> {
                                     '${(rate > 0 ? '+' : '')}${((vegetable['rate'] as double) * 100).toStringAsFixed(2)}%',
                                     style: TextStyle(
                                       fontSize: 18,
+                                      fontFamily: 'SOYO_Maple_Bold',
                                       color: rate > 0 ? Colors.red : (rate == 0 ? Colors.black : Colors.blue),
                                     ),
                                   ),
@@ -134,6 +135,7 @@ class _VegetablePageState extends State<VegetablePage> {
                                   child: Text(
                                     '${vegetable['price'].round()}원 / ${vegetable['unit']}',
                                     style: TextStyle(
+                                      fontFamily: 'SOYO_Maple_Regular',
                                     ),
                                   ),
                                 ),
