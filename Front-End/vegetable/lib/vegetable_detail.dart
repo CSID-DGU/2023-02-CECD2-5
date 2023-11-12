@@ -88,7 +88,6 @@ class _VegetableDetailPageState extends State<VegetableDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Vegetable Details"),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
           onPressed: () => Navigator.pop(context),
@@ -107,7 +106,14 @@ class _VegetableDetailPageState extends State<VegetableDetailPage> {
             return ListView(
               children: [
                 ListTile(
-                  title: Text(data['name'], style: TextStyle(fontSize: 24, fontFamily: 'SOYO_Maple_Bold')),
+                  title: Padding(
+                  padding: const EdgeInsets.only(left: 12.0), // Adjust the left padding as needed
+                  child: Text(
+                    data['name'],
+                    style: TextStyle(fontSize: 24, fontFamily: 'SOYO_Maple_Bold'),
+                  ),
+                ),
+
                   trailing: IconButton(
                     icon: Icon(Icons.favorite_border),
                     onPressed: () {
@@ -138,6 +144,7 @@ class _VegetableDetailPageState extends State<VegetableDetailPage> {
                     ),
                   ],
                 ),
+                Divider(thickness: 2,),
                 VegetableGraph(vegetableId: widget.vegetableId),
                 Padding(
                   
