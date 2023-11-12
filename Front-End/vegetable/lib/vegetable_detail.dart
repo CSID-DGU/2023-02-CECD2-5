@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'underbar.dart';
 import 'graph.dart'; // 이 부분은 실제 프로젝트의 구조에 맞게 조정하세요.
 
 class VegetableDetailPage extends StatefulWidget {
@@ -22,6 +23,7 @@ class VegetableDetailPage extends StatefulWidget {
 }
 
 class _VegetableDetailPageState extends State<VegetableDetailPage> {
+  int _selectedIndex = 0;
   late Future<Map<String, dynamic>> vegetableDetail;
   Map<String, double> processedGraphData = {}; // 초기화
 
@@ -107,7 +109,7 @@ class _VegetableDetailPageState extends State<VegetableDetailPage> {
               children: [
                 ListTile(
                   title: Padding(
-                  padding: const EdgeInsets.only(left: 12.0), // Adjust the left padding as needed
+                  padding: const EdgeInsets.only(top:5, left: 12.0), // Adjust the left padding as needed
                   child: Text(
                     data['name'],
                     style: TextStyle(fontSize: 24, fontFamily: 'SOYO_Maple_Bold'),
@@ -115,10 +117,12 @@ class _VegetableDetailPageState extends State<VegetableDetailPage> {
                 ),
 
                   trailing: IconButton(
+                    padding: const EdgeInsets.only(top:5, left: 12.0),
                     icon: Icon(Icons.favorite_border),
                     onPressed: () {
                       // 즐겨찾기 기능
                     },
+                    iconSize: 30,
                   ),
                 ),
                 Divider(thickness: 2,),
@@ -128,17 +132,36 @@ class _VegetableDetailPageState extends State<VegetableDetailPage> {
                     Expanded(
                       flex: 3,
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Image.network(data['image'], height: 200),
+                        padding: const EdgeInsets.only(top:20, left: 20.0, bottom:20, right:20),
+                        child: Image.network(data['image'], height: 130),
                       )
                     ),
                     Expanded(
                       flex: 2,
-                      child: Container(
-                        alignment: Alignment.center,
-                        child: Text(
-                          '${widget.price}원 / ${widget.unit}',
-                          style: TextStyle(fontSize: 20, fontFamily: 'SOYO_Maple_Bold'),
+                      child: Padding(
+                        padding: const EdgeInsets.only(right:30), // 원하는 간격 설정
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '최저가 ',
+                                  style: TextStyle(fontSize: 20, fontFamily: 'SOYO_Maple_Bold'),
+                                ),
+                                Text(
+                                  '(${widget.unit} 당)',
+                                  style: TextStyle(fontSize: 16, fontFamily: 'SOYO_Maple_Regular'),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 15), // 가격과 단위 사이 간격 조절
+                            Text(
+                              '${widget.price.round()}원',
+                              style: TextStyle(fontSize: 22, fontFamily: 'SOYO_Maple_Regular'),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -146,11 +169,27 @@ class _VegetableDetailPageState extends State<VegetableDetailPage> {
                 ),
                 Divider(thickness: 2,),
                 VegetableGraph(vegetableId: widget.vegetableId),
+                Divider(thickness: 2,),
+                ListTile(
+                    title: Padding(
+                    padding: const EdgeInsets.only(top: 10, bottom: 10, left: 5),
+                    
+                    child: Text(
+                      '보관법',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'SOYO_Maple_Bold',
+                      ),
+                    ), 
+                  ),
+                ),
                 Padding(
                   
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.only(top: 10, bottom: 10, left: 20, right:20),
                   child: Text(
-                    '보관법\n\n${data['storageMethod']}',
+                    '${data['storageMethod']}',
                     style: TextStyle(fontSize: 16, fontFamily: 'SOYO_Maple_Regular'),
                   ),
                 ),
@@ -158,6 +197,14 @@ class _VegetableDetailPageState extends State<VegetableDetailPage> {
               ],
             );
           }
+        },
+      ),
+      bottomNavigationBar: CustomBottomBar(
+        selectedIndex: _selectedIndex,
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
         },
       ),
     );
