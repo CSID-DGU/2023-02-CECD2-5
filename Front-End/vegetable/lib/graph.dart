@@ -101,7 +101,7 @@ class _VegetableGraphState extends State<VegetableGraph> {
                 return Text("Error: ${snapshot.error}");
               } else if (snapshot.hasData) {
                 return Container(
-                  height: 300.0,
+                  height: 330.0,
                   child: MyLineChart(data: snapshot.data!),
                   
                 );
@@ -128,12 +128,12 @@ class _VegetableGraphState extends State<VegetableGraph> {
         child: Text(
           unit,
           style: TextStyle(
-            fontSize: 15.0, // 이 부분을 변경하여 원하는 텍스트 크기로 설정하세요.
-            fontFamily: 'SOYO_Maple_Bold', // 이 부분을 변경하여 원하는 폰트로 설정하세요.
+            fontSize: 17.0, 
+            fontFamily: 'SOYO_Maple_Bold', 
           ),
         ),
       ),
-      SizedBox(width: 10.0), // 버튼 사이의 수평 간격을 조절합니다.
+      SizedBox(width: 10.0),
     ],
   )).toList(),
 ),
@@ -189,9 +189,10 @@ class MyLineChart extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          // Title
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+          ListTile(
+            title: Padding(
+            padding: const EdgeInsets.only(top: 10, bottom: 30, left: 5),
+            
             child: Text(
               '최저가 추이',
               textAlign: TextAlign.left,
@@ -202,7 +203,7 @@ class MyLineChart extends StatelessWidget {
               ),
             ), 
           ),
-          // LineChart
+        ),
           Padding(
             padding: const EdgeInsets.only(top: 0, bottom: 0, left: 20, right: 50),
             child: Container(
@@ -215,6 +216,22 @@ class MyLineChart extends StatelessWidget {
                       spots: spots,
                       colors: [Color.fromARGB(255, 20, 184, 39)],
                       barWidth: 3,
+                      belowBarData: BarAreaData(
+                        show: true, 
+                        // colors: [Color.fromARGB(255, 217, 245, 220)
+                        // , Color.fromARGB(255, 171, 226, 176)
+                        // , Color.fromARGB(255, 110, 206, 120)],
+                        colors: [Color.fromARGB(255, 192, 238, 196)],
+                      ),
+                      dotData: FlDotData(
+                        show: true,
+                        getDotPainter: (spot, percent, barData, index) {
+                          return FlDotCirclePainter(
+                            strokeWidth: 1,
+                            strokeColor: Color.fromARGB(255, 20, 184, 39),
+                          );
+                        },
+                      ),
                       // 기타 설정...
                     ),
                   ],
