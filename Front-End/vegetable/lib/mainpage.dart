@@ -43,6 +43,7 @@ class _MainPageState extends State<MainPage> {
         actions: <Widget>[
           buildPopupMenuButton(context),
         ],
+        elevation: 0,
       ),
       body: _widgetOptions[_selectedIndex],
       bottomNavigationBar: CustomBottomBar(
@@ -77,7 +78,7 @@ class MainContent extends StatelessWidget {
         // 오늘의 채소, 레시피 영역
         Expanded(
           child: Container(
-            color: Colors.lightGreen[100],
+            color: Color.fromARGB(255, 118, 191, 126),
             child: Row(
               children: [
                 Expanded(child: Center(child: Text("오늘의 채소"))),
