@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class VegetableLikeController {
     private final VegetableLikesService vegetableLikesService;
 
-    @GetMapping
+    @PostMapping
     public ResponseEntity<CommonResponse> getLikesByUserId(@RequestBody User user) {
         System.out.println(user.getUserId());
         System.out.println(user.getUserName());
