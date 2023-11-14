@@ -61,10 +61,10 @@ class _LoginPageState extends State<LoginPage> {
     try {
     // 사용자 정보를 스프링 서버에 전송
     final url = Uri.parse('http://ec2-54-180-36-184.ap-northeast-2.compute.amazonaws.com:8080/user');
-    //////////////////////////////////////////////////////////////////
+   
     User user = await UserApi.instance.me();
     globalUserName = user.kakaoAccount?.profile?.nickname ?? "익명 사용자";
-          //////////////////////////////////////////////////////////////////////////////////
+    
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
