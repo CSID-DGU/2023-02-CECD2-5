@@ -6,6 +6,7 @@ import com.vegetable.veggiehunter.domain.Vegetable;
 import com.vegetable.veggiehunter.domain.VegetableLikes;
 import com.vegetable.veggiehunter.dto.response.CommonResponse;
 import com.vegetable.veggiehunter.dto.response.ResponseService;
+import com.vegetable.veggiehunter.dto.response.likes.VegetableLikesListResponse;
 import com.vegetable.veggiehunter.dto.response.vegetable.VegetableListResponse;
 import com.vegetable.veggiehunter.dto.response.vegetable.VegetableResponse;
 import com.vegetable.veggiehunter.repository.likes.VegetableLikesRepository;
@@ -38,9 +39,9 @@ public class VegetableLikesService {
             vegetableIdList.add(vegetableLikes.getVegetable().getId());
         }
 
-        List<VegetableListResponse> vegetableListResponseList = vegetableRepository.getVegetableList(vegetableIdList);
+        List<VegetableLikesListResponse> vegetableLikesListResponseList = vegetableRepository.getVegetableLikesList(vegetableIdList);
 
-        return responseService.getListResponse(HttpStatus.OK.value(), vegetableListResponseList);
+        return responseService.getListResponse(HttpStatus.OK.value(), vegetableLikesListResponseList);
     }
 
     public CommonResponse addLikesToVegetable(String userId, Long vegetableId) {
