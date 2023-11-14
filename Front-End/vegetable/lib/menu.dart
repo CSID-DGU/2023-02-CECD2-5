@@ -3,7 +3,27 @@ import 'my_page.dart';
 import 'loginpage.dart';
 import 'settings.dart';
 import 'announcement.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 
+void _sendEmail() async {
+  final Email email = Email(
+    body: '',
+    subject: '[VeggieHunter 문의]',
+    recipients: ['eogus0512@gmail.com'],
+    cc: [],
+    bcc: [],
+    attachmentPaths: [],
+    isHTML: false,
+  );
+
+  try {
+    await FlutterEmailSender.send(email);
+  } catch (error) {
+    String title = "기본 메일 앱을 사용할 수 없기 때문에 앱에서 바로 문의를 전송하기 어려운 상황입니다.\n\n아래 이메일로 연락주시면 친절하게 답변해드리겠습니다 :)\n\neogus0512@gmail.com";
+    String message = "";
+    print(error);
+  }
+}
 
 Drawer buildMenuDrawer(BuildContext context) {
   return Drawer(
@@ -50,6 +70,7 @@ Drawer buildMenuDrawer(BuildContext context) {
                   '$globalUserName님, 환영합니다!',
                   style: TextStyle(
                     fontSize: 20.0,
+                    fontFamily: 'SOYO_maple_Bold',
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -59,7 +80,14 @@ Drawer buildMenuDrawer(BuildContext context) {
         ),
         ListTile(
           leading: Icon(Icons.person),
-          title: Text('마이페이지'),
+          title: Text(
+            '마이페이지',
+            style: TextStyle(
+                    fontSize: 14.0,
+                    fontFamily: 'SOYO_maple_Regular',
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
           onTap: () {
             Navigator.push(
               context,
@@ -70,7 +98,14 @@ Drawer buildMenuDrawer(BuildContext context) {
         Divider(),
         ListTile(
           leading: Icon(Icons.announcement),
-          title: Text('공지사항'),
+          title: Text(
+            '공지사항',
+            style: TextStyle(
+                    fontSize: 14.0,
+                    fontFamily: 'SOYO_maple_Regular',
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
           onTap: () {
             Navigator.push(
               context,
@@ -80,9 +115,16 @@ Drawer buildMenuDrawer(BuildContext context) {
         ),
         ListTile(
           leading: Icon(Icons.support_agent),
-          title: Text('고객센터'),
+          title: Text(
+            '문의하기',
+            style: TextStyle(
+                    fontSize: 14.0,
+                    fontFamily: 'SOYO_maple_Regular',
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
           onTap: () {
-            // 고객센터 페이지로 이동
+              _sendEmail();
           },
         ),
       ],
