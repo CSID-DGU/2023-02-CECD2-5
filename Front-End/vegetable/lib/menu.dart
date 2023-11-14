@@ -41,7 +41,7 @@ Drawer buildMenuDrawer(BuildContext context) {
                 ),
               ),
               Align(
-                alignment: Alignment.center,
+                alignment: Alignment(0, 0.5),
                 child: Text(
                   '$globalUserName님, 환영합니다!',
                   style: TextStyle(

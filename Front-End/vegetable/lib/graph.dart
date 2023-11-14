@@ -248,7 +248,7 @@ class MyLineChart extends StatelessWidget {
                     leftTitles: SideTitles(
                       showTitles: true,
                       reservedSize: 50,
-                      interval: interval,
+                      interval: interval != 0 ? interval : 1,
                       getTitles: (value) {
                         return value.toStringAsFixed(0);
                       },
