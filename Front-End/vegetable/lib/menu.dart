@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'favorites_page.dart'; // 찜한 목록 페이지
 import 'my_page.dart'; // 마이페이지
 import 'loginpage.dart';
 
@@ -53,6 +52,18 @@ Drawer buildMenuDrawer(BuildContext context) {
             ],
           ),
         ),
+        ListTile(
+          leading: Icon(Icons.person),
+          title: Text('마이페이지'),
+          onTap: () {
+            // 마이페이지로 이동
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => MyPage()), // MyPage로 이동
+            );
+          },
+        ),
+        Divider(),
         ListTile(
           leading: Icon(Icons.announcement),
           title: Text('공지사항'),
