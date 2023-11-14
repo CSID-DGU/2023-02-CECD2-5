@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'underbar.dart';
-import 'graph.dart'; // 이 부분은 실제 프로젝트의 구조에 맞게 조정하세요.
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'graph.dart';
 
 class VegetableDetailPage extends StatefulWidget {
   final int vegetableId;
@@ -24,8 +25,10 @@ class VegetableDetailPage extends StatefulWidget {
 
 class _VegetableDetailPageState extends State<VegetableDetailPage> {
   int _selectedIndex = 0;
+  bool likesData = false;
   late Future<Map<String, dynamic>> vegetableDetail;
   Map<String, double> processedGraphData = {}; // 초기화
+  Map<String, bool> processedLikesData = {};
 
   @override
   void initState() {
@@ -45,6 +48,9 @@ class _VegetableDetailPageState extends State<VegetableDetailPage> {
       processedGraphData = processGraphData(graphData);
       print('Processed Graph Data: $processedGraphData'); // 처리된 데이터 확인
 
+      likesData = await fetchLikes(id);
+      print(likesData);
+
       return json.decode(utf8.decode(vegetableResponse.bodyBytes));
     } else {
       throw Exception('Failed to load vegetable detail');
@@ -61,6 +67,26 @@ class _VegetableDetailPageState extends State<VegetableDetailPage> {
       return jsonResponse['data'];
     } else {
       throw Exception('Failed to load graph data');
+    }
+  }
+
+  Future<bool> fetchLikes(int id) async {
+    final url = Uri.parse('http://ec2-54-180-36-184.ap-northeast-2.compute.amazonaws.com:8080/vegetableLikes/isLikes/$id');
+    User user = await UserApi.instance.me();
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'userId': '${user.id}', 'userName': '${user.kakaoAccount?.profile?.nickname}'}),
+
+    );
+    print('Vegetable Likes Response: $response');
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> json = jsonDecode(response.body);
+      print(json['data']);
+      return json['data'];
+    } else {
+      throw Exception('Failed to load likes data');
     }
   }
 
@@ -117,10 +143,34 @@ class _VegetableDetailPageState extends State<VegetableDetailPage> {
                 ),
 
                   trailing: IconButton(
-                    padding: const EdgeInsets.only(top:5, left: 12.0),
-                    icon: Icon(Icons.favorite_border),
-                    onPressed: () {
-                      // 즐겨찾기 기능
+                    padding: const EdgeInsets.only(top: 5, left: 12.0),
+                    icon: likesData
+                        ? Icon(Icons.favorite, color: Colors.red) // 좋아요일 때는 색깔 있는 하트
+                        : Icon(Icons.favorite_border), // 좋아요가 아닐 때는 빈 하트
+                    onPressed: () async {
+                      User user = await UserApi.instance.me();
+                      final url = Uri.parse('http://ec2-54-180-36-184.ap-northeast-2.compute.amazonaws.com:8080/vegetableLikes/${widget.vegetableId}');
+
+                      if (likesData) {
+                        // 이미 좋아요한 경우에는 삭제
+                        final response = await http.delete(
+                          url,
+                          headers: {'Content-Type': 'application/json'},
+                          body: jsonEncode({'userId': '${user.id}', 'userName': '${user.kakaoAccount?.profile?.nickname}'}),
+                        );
+                      } else {
+                        // 좋아요하지 않은 경우에는 추가
+                        final response = await http.post(
+                          url,
+                          headers: {'Content-Type': 'application/json'},
+                          body: jsonEncode({'userId': '${user.id}', 'userName': '${user.kakaoAccount?.profile?.nickname}'}),
+                        );
+                      }
+
+                      // 상태 갱신
+                      setState(() {
+                        likesData = !likesData; // 토글
+                      });
                     },
                     iconSize: 30,
                   ),
