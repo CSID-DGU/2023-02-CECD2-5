@@ -33,7 +33,7 @@ class _MainPageState extends State<MainPage> {
   ];
 
 
-
+  String userName = "ddd";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,10 +41,11 @@ class _MainPageState extends State<MainPage> {
         title: Text(""),
         backgroundColor: Color.fromARGB(255, 118, 191, 126),
         actions: <Widget>[
-          buildPopupMenuButton(context),
+          
         ],
         elevation: 0,
       ),
+      endDrawer: buildMenuDrawer(context),
       body: _widgetOptions[_selectedIndex],
       bottomNavigationBar: CustomBottomBar(
         selectedIndex: _selectedIndex,

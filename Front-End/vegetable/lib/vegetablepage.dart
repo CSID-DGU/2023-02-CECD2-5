@@ -28,6 +28,7 @@ class VegetablePage extends StatefulWidget {
 class _VegetablePageState extends State<VegetablePage> {
   int _selectedIndex = 0;
 
+  String userName = "ddd";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,9 +51,9 @@ class _VegetablePageState extends State<VegetablePage> {
               // 검색 기능을 여기에 추가합니다.
             },
           ),
-          buildPopupMenuButton(context),
         ]
       ),
+      endDrawer: buildMenuDrawer(context),
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: fetchVegetables(),
         builder: (context, snapshot) {
