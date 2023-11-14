@@ -27,49 +27,107 @@ class VegetablePage extends StatefulWidget {
 
 class _VegetablePageState extends State<VegetablePage> {
   int _selectedIndex = 0;
+  bool _isSearching = false;
+  String _searchQuery = "";
+  List<Map<String, dynamic>> _allVegetables = [];
+  List<Map<String, dynamic>> _filteredVegetables = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchVegetables();
+  }
+
+  Future<void> _fetchVegetables() async {
+    var vegetables = await fetchVegetables();
+    setState(() {
+      _allVegetables = vegetables;
+      _filteredVegetables = vegetables;
+    });
+  }
+
+  void _updateSearchQuery(String newQuery) {
+    setState(() {
+      _searchQuery = newQuery;
+      if (newQuery.isNotEmpty) {
+        _filteredVegetables = _allVegetables.where((vegetable) {
+          return vegetable['name'].toLowerCase().contains(newQuery.toLowerCase());
+        }).toList();
+      } else {
+        _filteredVegetables = _allVegetables;
+      }
+    });
+  }
+
+
+  Widget _buildSearchField() {
+    return TextField(
+      autofocus: true,
+      decoration: InputDecoration(
+        hintText: "채소 검색...",
+        border: InputBorder.none,
+        hintStyle: TextStyle(color: Colors.white60),
+      ),
+      style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'SOYO_Maple_Bold'),
+      onChanged: _updateSearchQuery,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: _isSearching ? _buildSearchField() : Text(
           "채소",
           style: TextStyle(color: Colors.black, fontSize: 20, fontFamily: 'SOYO_Maple_Bold'),
         ),
-        
         backgroundColor: Colors.white,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            if (_isSearching) {
+              setState(() {
+                _isSearching = false;
+                _updateSearchQuery("");
+              });
+            } else {
+              Navigator.pop(context);
+            }
+          },
         ),
         actions: <Widget>[
-          
           IconButton(
-            icon: Icon(Icons.search, color: Colors.black),
+            icon: Icon(_isSearching ? Icons.clear : Icons.search, color: Colors.black),
             onPressed: () {
-              // 검색 기능을 여기에 추가합니다.
+              setState(() {
+                _isSearching = !_isSearching;
+                if (!_isSearching) {
+                  _updateSearchQuery("");
+                }
+              });
             },
           ),
-        ]
+        ],
       ),
       endDrawer: buildMenuDrawer(context),
-      body: FutureBuilder<List<Map<String, dynamic>>>(
-        future: fetchVegetables(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else {
-            final vegetables = snapshot.data!;
-            return GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 1,
-                childAspectRatio: (MediaQuery.of(context).size.width) / (100 + 16),
-              ),
-              itemCount: vegetables.length,
-              itemBuilder: (context, index) {
-                final vegetable = vegetables[index];
+    body: FutureBuilder<List<Map<String, dynamic>>>(
+      future: fetchVegetables(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else {
+          // _allVegetables를 최초 로드한 후에는 _filteredVegetables 리스트를 사용합니다.
+          _allVegetables = snapshot.data!;
+          return GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 1,
+              childAspectRatio: (MediaQuery.of(context).size.width) / (100 + 16),
+            ),
+            itemCount: _isSearching ? _filteredVegetables.length : _allVegetables.length,
+            itemBuilder: (context, index) {
+              final vegetable = _isSearching ? _filteredVegetables[index] : _allVegetables[index];
                 double rate = vegetable['rate'];
                 int vegetableId = vegetable['id'];
                 return GestureDetector(
@@ -148,6 +206,7 @@ class _VegetablePageState extends State<VegetablePage> {
                 ),
                   ),
                 );
+                
               },
             );
           }
@@ -164,7 +223,3 @@ class _VegetablePageState extends State<VegetablePage> {
     );
   }
 }
-
-// vegetable_detail.dart
-// 상세 페이지 구현
-// 이 부분에 VegetableDetailPage 위젯을 구현합니다.
