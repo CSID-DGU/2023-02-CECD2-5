@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'my_page.dart'; // 마이페이지
+import 'my_page.dart';
 import 'loginpage.dart';
+import 'settings.dart';
+import 'announcement.dart';
 
 
 Drawer buildMenuDrawer(BuildContext context) {
@@ -33,7 +35,10 @@ Drawer buildMenuDrawer(BuildContext context) {
                     IconButton(
                       icon: Icon(Icons.settings),
                       onPressed: () {
-                        // 설정 버튼 기능
+                        Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SettingsPage()), // MyPage로 이동
+                        );
                       },
                     ),
                   ],
@@ -56,7 +61,6 @@ Drawer buildMenuDrawer(BuildContext context) {
           leading: Icon(Icons.person),
           title: Text('마이페이지'),
           onTap: () {
-            // 마이페이지로 이동
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => MyPage()), // MyPage로 이동
@@ -68,7 +72,10 @@ Drawer buildMenuDrawer(BuildContext context) {
           leading: Icon(Icons.announcement),
           title: Text('공지사항'),
           onTap: () {
-            // 공지사항 페이지로 이동
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AnnouncementPage()), // MyPage로 이동
+            );
           },
         ),
         ListTile(
