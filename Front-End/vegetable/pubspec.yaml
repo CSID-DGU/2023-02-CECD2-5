@@ -35,9 +35,7 @@ dependencies:
   kakao_flutter_sdk: ^1.6.1 # 전체 추가
   kakao_flutter_sdk_user: ^1.6.1 # 카카오 로그인
   fl_chart: ^0.36.0
-
-
-
+  flutter_email_sender: 6.0.2
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -74,27 +72,6 @@ flutter:
     - family: Pacifico
       fonts:
         - asset: assets/fonts/Pacifico-Regular.ttf
-    - family: BMHANNAPro
-      fonts:
-        - asset: assets/fonts/BMHANNAPro.ttf
-    - family: NEXONLv1GoticBold
-      fonts:
-        - asset: assets/fonts/NEXONLv1GothicBold.ttf
-    - family: NEXONLv1GoticRegular
-      fonts:
-        - asset: assets/fonts/NEXONLv1GothicRegular.ttf
-    - family: NEXONLv1GoticLight
-      fonts:
-        - asset: assets/fonts/NEXONLv1GothicLight.ttf
-    - family: NotoSansKR-SemiBold
-      fonts:
-        - asset: assets/fonts/NotoSansKR-SemiBold.ttf
-    - family: NotoSansKR-Bold
-      fonts:
-        - asset: assets/fonts/NotoSansKR-Bold.ttf
-    - family: itim
-      fonts:
-        - asset: assets/fonts/itim-Regular.ttf
     - family: AbrilFatface
       fonts:
         - asset: assets/fonts/AbrilFatface-Regular.ttf
