@@ -41,7 +41,6 @@ class _MainPageState extends State<MainPage> {
         title: Text(""),
         backgroundColor: Color.fromARGB(255, 118, 191, 126),
         actions: <Widget>[
-          
         ],
         elevation: 0,
       ),
@@ -88,7 +87,7 @@ class MainContent extends StatelessWidget {
             ),
           ),
         ),
-        // 가장 많이 본 채소 TOP 10
+        // 좋아요 높은 채소 TOP 5
         Expanded(
           child: Column(
             children: [
@@ -97,7 +96,7 @@ class MainContent extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("가장 많이 본 채소 TOP 10", style: TextStyle(fontSize: 20.0, fontFamily: 'SOYO_Maple_Bold',)),
+                    Text("좋아요 높은 채소 TOP 5", style: TextStyle(fontSize: 20.0, fontFamily: 'SOYO_Maple_Bold',)),
                     InkWell(
                       onTap: () {
                         Navigator.push(
@@ -129,7 +128,7 @@ class MainContent extends StatelessWidget {
             ],
           ),
         ),
-        // 가장 많이 본 레시피 TOP 10
+        // 좋아요 높은 레시피 TOP 5
         Expanded(
           child: Column(
             children: [
@@ -138,7 +137,7 @@ class MainContent extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("가장 많이 본 레시피 TOP 10", style: TextStyle(fontSize: 20.0, fontFamily: 'SOYO_Maple_Bold',)),
+                    Text("좋아요 높은 레시피 TOP 5", style: TextStyle(fontSize: 20.0, fontFamily: 'SOYO_Maple_Bold',)),
                     InkWell(
                       onTap: () {
                         Navigator.push(

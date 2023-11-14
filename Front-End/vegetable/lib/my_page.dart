@@ -155,7 +155,10 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                               alignment: Alignment.center,
                               child: Text(
                                 '${vegetable['name']}',
-                                style: TextStyle(fontSize: 20, fontFamily: 'SOYO_Maple_Bold'),
+                                style: TextStyle(
+                                  fontSize: (vegetable['name'].length >= 4) ? 17 : 20,
+                                  fontFamily: 'SOYO_Maple_Bold',
+                                ),
                               ),
                             ),
                           ),

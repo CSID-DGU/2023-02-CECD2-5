@@ -46,14 +46,22 @@ class _SettingsPageState extends State<SettingsPage> {
       body: ListView(
         children: <Widget>[
           SwitchListTile(
-            title: Text('푸시 알림'),
+            title: Text(
+              '푸시 알림',
+              style: TextStyle(fontSize: 16, fontFamily: 'SOYO_Maple_Regular'
+              ),
+            ),
             value: _isNotificationsOn,
             onChanged: _toggleNotification,
             secondary: Icon(Icons.notifications),
           ),
           ListTile(
             leading: Icon(Icons.exit_to_app),
-            title: Text('로그아웃'),
+            title: Text(
+              '로그아웃',
+              style: TextStyle(fontSize: 16, fontFamily: 'SOYO_Maple_Regular'
+              ),
+            ),
             onTap: _logout,
           ),
         ],

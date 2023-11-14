@@ -24,7 +24,6 @@ class VegetableDetailPage extends StatefulWidget {
 }
 
 class _VegetableDetailPageState extends State<VegetableDetailPage> {
-  int _selectedIndex = 0;
   bool likesData = false;
   late Future<Map<String, dynamic>> vegetableDetail;
   Map<String, double> processedGraphData = {}; // 초기화
@@ -247,14 +246,6 @@ class _VegetableDetailPageState extends State<VegetableDetailPage> {
               ],
             );
           }
-        },
-      ),
-      bottomNavigationBar: CustomBottomBar(
-        selectedIndex: _selectedIndex,
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
         },
       ),
     );
