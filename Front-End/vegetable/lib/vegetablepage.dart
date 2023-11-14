@@ -28,7 +28,6 @@ class VegetablePage extends StatefulWidget {
 class _VegetablePageState extends State<VegetablePage> {
   int _selectedIndex = 0;
 
-  String userName = "ddd";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
