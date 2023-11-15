@@ -9,6 +9,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.vegetable.veggiehunter.domain.Price;
 import com.vegetable.veggiehunter.domain.Vegetable;
 import com.vegetable.veggiehunter.dto.response.likes.VegetableLikesListResponse;
+import com.vegetable.veggiehunter.dto.response.recipe.RecipeVegetableListResponse;
 import com.vegetable.veggiehunter.dto.response.vegetable.VegetableGraphResponse;
 import com.vegetable.veggiehunter.dto.response.vegetable.VegetableListResponse;
 
@@ -177,6 +178,19 @@ public class VegetableRepositoryImpl implements VegetableRepositoryCustom {
                 .where(price1.name.eq(vegetableName)
                         .and(price1.createdDate.between(recentDate.minusDays(6), recentDate)))
                 .groupBy(price1.name, price1.unit, price1.createdDate)
+                .fetch();
+    }
+
+    @Override
+    public List<RecipeVegetableListResponse> getRecipeVegetableList() {
+        return queryFactory
+                .select(Projections.constructor(
+                        RecipeVegetableListResponse.class,
+                        vegetable.id,
+                        vegetable.name,
+                        vegetable.image
+                ))
+                .from(vegetable)
                 .fetch();
     }
 }
