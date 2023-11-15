@@ -65,15 +65,19 @@ flutter {
     source '../..'
 }
 
+//apply plugin: 'com.android.application'
+// Add this line
+//apply plugin: 'com.google.gms.google-services'
+
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation platform('com.google.firebase:firebase-bom:29.0.2')//
+    implementation platform('com.google.firebase:firebase-bom:29.0.2')
     implementation 'com.google.firebase:firebase-analytics'
 
-/*
+
     implementation 'com.google.gms:google-services:4.3.15'
     implementation 'com.google.firebase:firebase-auth:22.0.0'
-    implementation platform ('com.google.firebase:firebase-bom:32.0.0')
-    implementation 'com.google.android.gms:play-services-auth:20.5.0'
-    */
+    //implementation platform ('com.google.firebase:firebase-bom:32.0.0')
+    //implementation 'com.google.android.gms:play-services-auth:20.5.0'
+    
 }

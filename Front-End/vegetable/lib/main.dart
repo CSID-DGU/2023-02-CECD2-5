@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:vegetable/firebase_options.dart';
 import 'package:vegetable/loginpage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'firebase_options.dart';
 
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -35,7 +37,9 @@ void initializeNotification() async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   initializeNotification();
   KakaoSdk.init(nativeAppKey: '93f361551a041539af0d3c00f61e907b');
   runApp(const MyApp());
