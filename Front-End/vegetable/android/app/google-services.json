@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1068133138181",
+    "project_id": "vegehunter-3bd4e",
+    "storage_bucket": "vegehunter-3bd4e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1068133138181:android:8169b4c31b8ba5fad8416c",
+        "android_client_info": {
+          "package_name": "com.example.vegetable"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2xxPI7w_N_BMOXv4PPTK9Z_meYG5Ch_U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

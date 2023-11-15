@@ -1,6 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.url_launcher_example">
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
+   <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
     <queries>
         <!-- If your app opens https URLs -->
         <intent>
@@ -66,5 +69,6 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
     </application>
 </manifest>

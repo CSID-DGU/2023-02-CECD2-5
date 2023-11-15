@@ -35,12 +35,17 @@ dependencies:
   kakao_flutter_sdk: ^1.6.1 # 전체 추가
   kakao_flutter_sdk_user: ^1.6.1 # 카카오 로그인
   fl_chart: ^0.36.0
+  flutter_local_notifications: ^14.0.0+1
   flutter_email_sender: 6.0.2
+  firebase_messaging: ^14.7.4
+  permission_handler: ^8.3.0
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   url_launcher: ^6.2.1
+  firebase_core: ^2.22.0
 
 dev_dependencies:
   flutter_test:
