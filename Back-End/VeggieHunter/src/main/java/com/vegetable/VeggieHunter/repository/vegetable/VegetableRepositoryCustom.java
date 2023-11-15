@@ -2,6 +2,7 @@ package com.vegetable.veggiehunter.repository.vegetable;
 
 import com.vegetable.veggiehunter.domain.Vegetable;
 import com.vegetable.veggiehunter.dto.response.likes.VegetableLikesListResponse;
+import com.vegetable.veggiehunter.dto.response.recipe.RecipeVegetableListResponse;
 import com.vegetable.veggiehunter.dto.response.vegetable.VegetableGraphResponse;
 import com.vegetable.veggiehunter.dto.response.vegetable.VegetableListResponse;
 
@@ -15,4 +16,6 @@ public interface VegetableRepositoryCustom {
     List<VegetableLikesListResponse> getVegetableLikesList(List<Long> vegetableIdList);
 
     List<VegetableGraphResponse> getVegetableGraphList(Long vegetableId);
+
+    List<RecipeVegetableListResponse> getRecipeVegetableList();
 }
