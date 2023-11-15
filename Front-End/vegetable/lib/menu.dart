@@ -4,6 +4,8 @@ import 'loginpage.dart';
 import 'settings.dart';
 import 'announcement.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
+import 'help.dart';
+
 
 void _sendEmail() async {
   final Email email = Email(
@@ -110,6 +112,23 @@ Drawer buildMenuDrawer(BuildContext context) {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => AnnouncementPage()), // MyPage로 이동
+            );
+          },
+        ),
+        ListTile(
+          leading: Icon(Icons.help),
+          title: Text(
+            '도움말',
+            style: TextStyle(
+                    fontSize: 14.0,
+                    fontFamily: 'SOYO_maple_Regular',
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HelpPage()), // MyPage로 이동
             );
           },
         ),
