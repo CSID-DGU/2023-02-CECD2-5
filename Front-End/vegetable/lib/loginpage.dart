@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:vegetable/login_platform.dart';
 import 'package:vegetable/mainpage.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 String globalUserName = "";
 
@@ -17,7 +17,33 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  String? token;
   LoginPlatform _loginPlatform = LoginPlatform.none;
+
+  @override
+  void initState() {
+    super.initState();
+    registerNotification();
+  }
+
+  void registerNotification() async {
+    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
+    token = await FirebaseMessaging.instance.getToken();
+    print("Device Token: $token");
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print("onMessage: ${message.notification?.body}");
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print("onMessageOpenedApp: ${message.notification?.body}");
+    });
+  }
 
   void signInWithKakao() async {
     try {
