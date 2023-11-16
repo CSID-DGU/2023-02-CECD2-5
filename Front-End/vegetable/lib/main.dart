@@ -7,8 +7,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 String serverKey = "AAAA-LGyPwU:APA91bHEWfwOC4kHKv11pKbw_IQknf-h-RUvsUtwQV671LVWhealEzYB5873jKT7DaozNPzop04KwjuFlFnd2AGmJmaGRDPNbachaxbbekuWraUS1aJQCvGdj0sQoXBYjsZRnyyiSnOg";
-String myDeviceToken = "fEVnGgviT5injJArEMm94H:APA91bFJ4i-05OWlW41RpoaFxBmVSlZb5uLSTYkYDL1k1LWm6-_NDRlNKnVCnc3uZnvc5mLILgA0_9xqNSem6Xlshe55z5_nml0Cf2QLqLLrFg30fS_9XQDBX7xwWtpjwatn1VnIEjKL";
-
+//String myDeviceToken = "fEVnGgviT5injJArEMm94H:APA91bFJ4i-05OWlW41RpoaFxBmVSlZb5uLSTYkYDL1k1LWm6-_NDRlNKnVCnc3uZnvc5mLILgA0_9xqNSem6Xlshe55z5_nml0Cf2QLqLLrFg30fS_9XQDBX7xwWtpjwatn1VnIEjKL";
+String token='';
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -137,6 +137,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    getMyDeviceToken();
     return Scaffold(
       body: Center(
         child: Column(
@@ -145,7 +146,8 @@ class _HomePageState extends State<HomePage> {
             Text("메시지 내용: $messageString"),
             ElevatedButton(
               onPressed: () => sendNotificationToDevice(
-                  deviceToken: myDeviceToken,
+                
+                  deviceToken: token,
                   title: '푸시 알림 테스트',
                   content: '푸시 알림 내용',
                   data: {'test_parameter1': 1, 'test_parameter2': '테스트1'}),
