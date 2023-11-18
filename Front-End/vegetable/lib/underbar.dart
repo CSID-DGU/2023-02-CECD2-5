@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'mainpage.dart';
 import 'vegetablepage.dart';
+import 'recipepage.dart';
 
 class CustomBottomBar extends StatelessWidget {
   final int selectedIndex;
