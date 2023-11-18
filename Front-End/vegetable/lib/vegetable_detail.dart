@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'underbar.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'graph.dart';
 
@@ -134,12 +133,12 @@ class _VegetableDetailPageState extends State<VegetableDetailPage> {
               children: [
                 ListTile(
                   title: Padding(
-                  padding: const EdgeInsets.only(top:5, left: 12.0), // Adjust the left padding as needed
-                  child: Text(
-                    data['name'],
-                    style: TextStyle(fontSize: 24, fontFamily: 'SOYO_Maple_Bold'),
+                    padding: const EdgeInsets.only(top:5, left: 12.0), // Adjust the left padding as needed
+                    child: Text(
+                      data['name'],
+                      style: TextStyle(fontSize: 24, fontFamily: 'SOYO_Maple_Bold'),
+                    ),
                   ),
-                ),
 
                   trailing: IconButton(
                     padding: const EdgeInsets.only(top: 5, left: 12.0),
@@ -220,7 +219,7 @@ class _VegetableDetailPageState extends State<VegetableDetailPage> {
                 VegetableGraph(vegetableId: widget.vegetableId),
                 Divider(thickness: 2,),
                 ListTile(
-                    title: Padding(
+                  title: Padding(
                     padding: const EdgeInsets.only(top: 10, bottom: 10, left: 5),
                     
                     child: Text(

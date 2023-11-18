@@ -64,11 +64,11 @@ class _VegetablePageState extends State<VegetablePage> {
     return TextField(
       autofocus: true,
       decoration: InputDecoration(
-        hintText: "채소 검색...",
+        hintText: "검색어를 입력하세요",
         border: InputBorder.none,
         hintStyle: TextStyle(color: Colors.white60),
       ),
-      style: TextStyle(color: Colors.black, fontSize: 16.0, fontFamily: 'SOYO_Maple_Bold'),
+      style: TextStyle(color: Colors.white, fontSize: 16.0, fontFamily: 'SOYO_Maple_Bold'),
       onChanged: _updateSearchQuery,
     );
   }
@@ -79,11 +79,11 @@ class _VegetablePageState extends State<VegetablePage> {
       appBar: AppBar(
         title: _isSearching ? _buildSearchField() : Text(
           "채소",
-          style: TextStyle(color: Colors.black, fontSize: 20, fontFamily: 'SOYO_Maple_Bold'),
+          style: TextStyle(color: Colors.white, fontSize: 20, fontFamily: 'SOYO_Maple_Bold'),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Color.fromARGB(255, 118, 191, 126), 
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new, color: Colors.black),
+          icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
           onPressed: () {
             if (_isSearching) {
               setState(() {
@@ -97,7 +97,7 @@ class _VegetablePageState extends State<VegetablePage> {
         ),
         actions: <Widget>[
           IconButton(
-            icon: Icon(_isSearching ? Icons.clear : Icons.search, color: Colors.black),
+            icon: Icon(_isSearching ? Icons.clear : Icons.search, color: Colors.white),
             onPressed: () {
               setState(() {
                 _isSearching = !_isSearching;
@@ -197,16 +197,15 @@ class _VegetablePageState extends State<VegetablePage> {
                                     ),
                                   ),
                                 ),
-                          ],
-                        ),
-                      ),
+                              ],
+                            ),
+                          ),
                         ]
+                      ),
+                    ),
                     ),
                   ),
-                ),
-                  ),
                 );
-                
               },
             );
           }
