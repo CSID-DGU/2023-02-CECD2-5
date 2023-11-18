@@ -71,8 +71,32 @@ class MainContent extends StatelessWidget {
             color: Color.fromARGB(255, 118, 191, 126),
             child: Row(
               children: [
-                Expanded(child: Center(child: Text("오늘의 채소"))),
-                Expanded(child: Center(child: Text("오늘의 레시피")))
+                Expanded(
+                  child: Center(
+                    child: Text(
+                      "오늘의 채소",
+                      style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'SOYO_Maple_Regular',
+                              color: Colors.white,
+                      ),
+                    )
+                  )
+                ),
+                Expanded(
+                  child: Center(
+                    child: Text(
+                      "오늘의 레시피",
+                      style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'SOYO_Maple_Regular',
+                              color: Colors.white,
+                      ),
+                    )
+                  )
+                )
               ],
             ),
           ),
