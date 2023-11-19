@@ -15,6 +15,7 @@ import com.vegetable.veggiehunter.repository.vegetable.VegetableRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class VegetableLikesService {
     private final UserRepository userRepository;
     private final VegetableLikesRepository vegetableLikesRepository;
