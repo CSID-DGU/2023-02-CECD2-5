@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import 'loginpage.dart'; // Assuming globalUserName is defined here
 
 class RecipeSender {
@@ -22,36 +23,46 @@ class RecipeSender {
     var uri = Uri.parse('http://ec2-54-180-36-184.ap-northeast-2.compute.amazonaws.com:8080/recipe');
     var request = http.MultipartRequest('POST', uri);
 
-    // RecipeRequest
-    request.fields['recipeRequest'] = jsonEncode({
-      "title": recipeName,
-      "writer": globalUserName, // Use the globalUserName from loginpage.dart
-      "vegetableId": vegetableId,
-    });
+    // Convert structured data to JSON
+    Map<String, dynamic> recipeRequest = {
+      'title': recipeName,
+      'writer': globalUserName, // Assuming this is the writer's name
+      'vegetableId': vegetableId
+    };
+    List<Map<String, dynamic>> stepsRequestList = steps
+        .asMap()
+        .map((i, step) => MapEntry(i, {'step': i + 1, 'content': step}))
+        .values
+        .toList();
+    List<Map<String, dynamic>> ingredientsRequestList = ingredients
+        .map((ingredient) => {
+          'name': ingredient['ingredient']!,
+          'amount': ingredient['quantity']!
+        })
+        .toList();
 
-    // RecipeStepsRequestList
-    var stepsData = List.generate(steps.length, (i) => {
-      "step": (i + 1).toString(),
-      "content": steps[i] // Directly use the string from steps list
-    });
-    request.fields['recipeStepsRequestList'] = jsonEncode(stepsData);
+    // Add parts to request as MultipartFiles
+    request.files.add(http.MultipartFile.fromString(
+      'recipeRequest', 
+      jsonEncode(recipeRequest), 
+      contentType: MediaType('application', 'json')
+    ));
+    request.files.add(http.MultipartFile.fromString(
+      'recipeStepsRequestList', 
+      jsonEncode(stepsRequestList), 
+      contentType: MediaType('application', 'json')
+    ));
+    request.files.add(http.MultipartFile.fromString(
+      'ingredientRequestList', 
+      jsonEncode(ingredientsRequestList), 
+      contentType: MediaType('application', 'json')
+    ));
 
-    // IngredientRequestList
-    var ingredientsData = ingredients.map((ingredient) {
-      return {
-        "name": ingredient['ingredient']!,
-        "amount": ingredient['quantity']!
-      };
-    }).toList();
-    request.fields['ingredientRequestList'] = jsonEncode(ingredientsData);
-
-    // MultipartFileList
+    // Add multipart file for image, if present
     if (selectedImage != null) {
-      var multipartFile = await http.MultipartFile.fromPath(
-        'files',
-        selectedImage!.path,
-      );
-      request.files.add(multipartFile);
+      request.files.add(await http.MultipartFile.fromPath(
+        'files', selectedImage!.path
+      ));
     }
 
     try {
