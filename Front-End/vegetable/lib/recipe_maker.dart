@@ -15,9 +15,24 @@ class _MakeRecipePageState extends State<MakeRecipePage> {
   final _formKey = GlobalKey<FormState>();
   String _recipeName = '';
   List<Map<String, String>> _ingredients = [{'ingredient': '', 'quantity': ''}];
+  List<TextEditingController> _ingredientNameControllers = [];
+  List<TextEditingController> _ingredientQuantityControllers = [];
   List<String> _steps = [''];
+  List<TextEditingController> _stepControllers = [];
   File? _selectedImage;
   final ImagePicker _picker = ImagePicker();
+
+  @override
+  void initState() {
+    super.initState();
+    for (var ingredient in _ingredients) {
+      _ingredientNameControllers.add(TextEditingController(text: ingredient['ingredient']));
+      _ingredientQuantityControllers.add(TextEditingController(text: ingredient['quantity']));
+    }
+    for (var step in _steps) {
+      _stepControllers.add(TextEditingController(text: step));
+    }
+  }
 
   Future<void> _pickImage() async {
     try {
@@ -99,8 +114,8 @@ class _MakeRecipePageState extends State<MakeRecipePage> {
           children: [
             Expanded(
               child: TextFormField(
+                controller: _ingredientNameControllers[i],
                 decoration: InputDecoration(labelText: 'Ingredient'),
-                initialValue: _ingredients[i]['ingredient'],
                 onSaved: (value) {
                   _ingredients[i]['ingredient'] = value!;
                 },
@@ -115,8 +130,8 @@ class _MakeRecipePageState extends State<MakeRecipePage> {
             SizedBox(width: 10),
             Expanded(
               child: TextFormField(
+                controller: _ingredientQuantityControllers[i],
                 decoration: InputDecoration(labelText: 'Quantity'),
-                initialValue: _ingredients[i]['quantity'],
                 onSaved: (value) {
                   _ingredients[i]['quantity'] = value!;
                 },
@@ -142,12 +157,18 @@ class _MakeRecipePageState extends State<MakeRecipePage> {
   void _addNewIngredientField() {
     setState(() {
       _ingredients.add({'ingredient': '', 'quantity': ''});
+      _ingredientNameControllers.add(TextEditingController());
+      _ingredientQuantityControllers.add(TextEditingController());
     });
   }
 
   void _removeIngredientField(int index) {
     setState(() {
       _ingredients.removeAt(index);
+      _ingredientNameControllers[index].dispose();
+      _ingredientQuantityControllers[index].dispose();
+      _ingredientNameControllers.removeAt(index);
+      _ingredientQuantityControllers.removeAt(index);
     });
   }
 
@@ -159,8 +180,8 @@ class _MakeRecipePageState extends State<MakeRecipePage> {
           children: [
             Expanded(
               child: TextFormField(
+                controller: _stepControllers[i],
                 decoration: InputDecoration(labelText: 'Step ${i + 1}'),
-                initialValue: _steps[i],
                 onSaved: (value) {
                   _steps[i] = value!;
                 },
@@ -186,12 +207,29 @@ class _MakeRecipePageState extends State<MakeRecipePage> {
   void _addNewStepField() {
     setState(() {
       _steps.add('');
+      _stepControllers.add(TextEditingController());
     });
   }
 
   void _removeStepField(int index) {
     setState(() {
       _steps.removeAt(index);
+      _stepControllers[index].dispose();
+      _stepControllers.removeAt(index);
     });
+  }
+
+  @override
+  void dispose() {
+    for (var controller in _ingredientNameControllers) {
+      controller.dispose();
+    }
+    for (var controller in _ingredientQuantityControllers) {
+      controller.dispose();
+    }
+    for (var controller in _stepControllers) {
+      controller.dispose();
+    }
+    super.dispose();
   }
 }
