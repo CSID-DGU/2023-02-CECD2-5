@@ -43,8 +43,15 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom{
                 ))
                 .from(recipe)
                 .where(recipe.vegetable.id.eq(vegetableId))
-                .leftJoin(photo).on(recipe.id.eq(photo.recipe.id))
-                .limit(1)
+                .leftJoin(photo)
+                .on(recipe.id.eq(photo.recipe.id)
+                        .and(photo.id.eq(
+                                JPAExpressions
+                                        .select(photo.id.max())
+                                        .from(photo)
+                                        .where(photo.recipe.id.eq(recipe.id))
+                        ))
+                )
                 .fetch();
     }
 
