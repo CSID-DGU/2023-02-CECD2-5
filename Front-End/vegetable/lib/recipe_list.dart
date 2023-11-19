@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:vegetable/recipe_info.dart';
+import 'recipe_maker.dart';
 
 class RecipeListPage extends StatefulWidget {
   final int vegetableId;
@@ -133,6 +134,22 @@ class _RecipeListPageState extends State<RecipeListPage> {
                 );
               },
             ),
+            floatingActionButton: FloatingActionButton(
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MakeRecipePage(vegetableId: widget.vegetableId),
+      ),
+    ).then((_) {
+      // Optionally refresh the recipe list after returning from the MakeRecipePage
+      fetchRecipes();
+    });
+  },
+  child: Icon(Icons.add),
+  backgroundColor: Colors.green,
+),
+
     );
   }
 }
