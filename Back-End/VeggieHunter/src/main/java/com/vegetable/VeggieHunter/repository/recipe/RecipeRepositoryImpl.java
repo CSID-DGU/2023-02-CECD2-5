@@ -1,15 +1,22 @@
 package com.vegetable.veggiehunter.repository.recipe;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.vegetable.veggiehunter.dto.response.likes.RecipeLikesListResponse;
+import com.vegetable.veggiehunter.dto.response.likes.VegetableLikesListResponse;
 import com.vegetable.veggiehunter.dto.response.recipe.RecipeListResponse;
 import com.vegetable.veggiehunter.dto.response.recipe.RecipeVegetableListResponse;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDate;
 import java.util.List;
 
+import static com.vegetable.veggiehunter.domain.QPrice.price1;
 import static com.vegetable.veggiehunter.domain.QRecipe.recipe;
 import static com.vegetable.veggiehunter.domain.QPhoto.photo;
+import static com.vegetable.veggiehunter.domain.QVegetable.vegetable;
 
 public class RecipeRepositoryImpl implements RecipeRepositoryCustom{
     private JPAQueryFactory queryFactory;
@@ -32,6 +39,27 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom{
                 ))
                 .from(recipe)
                 .where(recipe.vegetable.id.eq(vegetableId))
+                .leftJoin(photo).on(recipe.id.eq(photo.recipe.id))
+                .limit(1)
+                .fetch();
+    }
+
+    @Override
+    public List<RecipeLikesListResponse> getRecipeLikesList(List<Long> recipeIdList) {
+        Boolean isLikes = true;
+
+        return queryFactory
+                .select(
+                        Projections.constructor(
+                                RecipeLikesListResponse.class,
+                                recipe.id,
+                                recipe.title,
+                                photo.savedFile,
+                                Expressions.constant(isLikes)
+                        )
+                )
+                .from(recipe)
+                .where(recipe.id.in(recipeIdList))
                 .leftJoin(photo).on(recipe.id.eq(photo.recipe.id))
                 .limit(1)
                 .fetch();

@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 @Slf4j
 public class RecipeService {
     private final S3Service s3Service;
