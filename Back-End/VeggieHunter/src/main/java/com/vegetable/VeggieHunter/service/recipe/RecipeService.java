@@ -8,6 +8,7 @@ import com.vegetable.veggiehunter.dto.request.recipe.RecipeStepsRequest;
 import com.vegetable.veggiehunter.dto.response.CommonResponse;
 import com.vegetable.veggiehunter.dto.response.ResponseService;
 import com.vegetable.veggiehunter.dto.response.recipe.*;
+import com.vegetable.veggiehunter.dto.response.vegetable.VegetableHighLikesListResponse;
 import com.vegetable.veggiehunter.dto.response.vegetable.VegetableListResponse;
 import com.vegetable.veggiehunter.repository.photo.PhotoRepository;
 import com.vegetable.veggiehunter.repository.recipe.IngredientRepository;
@@ -129,5 +130,10 @@ public class RecipeService {
                 .collect(Collectors.toList());
 
         return responseService.getListResponse(HttpStatus.OK.value(), response);
+    }
+
+    public CommonResponse.ListResponse<RecipeHighLikesListResponse> getRecipeHighLikesList() {
+        List<RecipeHighLikesListResponse> result = recipeRepository.getRecipeHighLikesList();
+        return responseService.getListResponse(HttpStatus.OK.value(), result);
     }
 }

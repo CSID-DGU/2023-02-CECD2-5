@@ -11,6 +11,7 @@ import com.vegetable.veggiehunter.domain.Vegetable;
 import com.vegetable.veggiehunter.dto.response.likes.VegetableLikesListResponse;
 import com.vegetable.veggiehunter.dto.response.recipe.RecipeVegetableListResponse;
 import com.vegetable.veggiehunter.dto.response.vegetable.VegetableGraphResponse;
+import com.vegetable.veggiehunter.dto.response.vegetable.VegetableHighLikesListResponse;
 import com.vegetable.veggiehunter.dto.response.vegetable.VegetableListResponse;
 
 import javax.persistence.EntityManager;
@@ -19,6 +20,7 @@ import java.util.List;
 
 import static com.vegetable.veggiehunter.domain.QPrice.price1;
 import static com.vegetable.veggiehunter.domain.QVegetable.vegetable;
+import static com.vegetable.veggiehunter.domain.QVegetableLikes.vegetableLikes;
 
 public class VegetableRepositoryImpl implements VegetableRepositoryCustom {
 
@@ -191,6 +193,25 @@ public class VegetableRepositoryImpl implements VegetableRepositoryCustom {
                         vegetable.image
                 ))
                 .from(vegetable)
+                .fetch();
+    }
+
+    @Override
+    public List<VegetableHighLikesListResponse> getVegetableHighLikesList() {
+        return queryFactory
+                .select(
+                        Projections.constructor(
+                                VegetableHighLikesListResponse.class,
+                                vegetableLikes.vegetable.id,
+                                vegetableLikes.vegetable.name,
+                                vegetableLikes.vegetable.image,
+                                vegetableLikes.vegetableLikes.count()
+                        )
+                )
+                .from(vegetableLikes)
+                .groupBy(vegetableLikes.vegetable.id, vegetableLikes.vegetable.name, vegetableLikes.vegetable.image)
+                .orderBy(vegetableLikes.vegetableLikes.count().desc())
+                .limit(5)
                 .fetch();
     }
 }

@@ -26,6 +26,26 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
     fetchRecipeDetails(widget.recipeId);
   }
 
+  Future<bool> fetchLikes(int id) async {
+    final url = Uri.parse('http://ec2-54-180-36-184.ap-northeast-2.compute.amazonaws.com:8080/recipeLikes/isLikes/$id');
+    User user = await UserApi.instance.me();
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'userId': '${user.id}', 'userName': '${user.kakaoAccount?.profile?.nickname}'}),
+
+    );
+    print('Vegetable Likes Response: $response');
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> json = jsonDecode(response.body);
+      print(json['data']);
+      return json['data'];
+    } else {
+      throw Exception('Failed to load likes data');
+    }
+  }
+
   Future<void> fetchRecipeDetails(int id) async {
     final detailUrl = Uri.parse('http://ec2-54-180-36-184.ap-northeast-2.compute.amazonaws.com:8080/recipe/detail/$id');
     final stepsUrl = Uri.parse('http://ec2-54-180-36-184.ap-northeast-2.compute.amazonaws.com:8080/recipe/steps/$id');
@@ -61,6 +81,10 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
     final detailResponse = await http.get(detailUrl);
     if (detailResponse.statusCode == 200) {
       var detailData = json.decode(utf8.decode(detailResponse.bodyBytes));
+      
+      likesData = await fetchLikes(id);
+      print(likesData);
+
       if (detailData['success'] && detailData['code'] == 200) {
         setState(() {
           recipeDetail = detailData['data'];
@@ -68,6 +92,8 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
         });
       }
     }
+
+
   }
 
   @override
