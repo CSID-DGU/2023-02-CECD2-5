@@ -4,6 +4,7 @@ import com.vegetable.veggiehunter.dto.response.vegetable.VegetableGraphResponse;
 import com.vegetable.veggiehunter.domain.Vegetable;
 import com.vegetable.veggiehunter.dto.response.CommonResponse;
 import com.vegetable.veggiehunter.dto.response.ResponseService;
+import com.vegetable.veggiehunter.dto.response.vegetable.VegetableHighLikesListResponse;
 import com.vegetable.veggiehunter.dto.response.vegetable.VegetableListResponse;
 import com.vegetable.veggiehunter.dto.response.vegetable.VegetableResponse;
 import com.vegetable.veggiehunter.repository.vegetable.VegetableRepository;
@@ -36,6 +37,11 @@ public class VegetableService {
 
     public CommonResponse.ListResponse<VegetableGraphResponse> getVegetableGraph(Long vegetableId) {
         List<VegetableGraphResponse> result = vegetableRepository.getVegetableGraphList(vegetableId);
+        return responseService.getListResponse(HttpStatus.OK.value(), result);
+    }
+
+    public CommonResponse.ListResponse<VegetableHighLikesListResponse> getVegetableHighLikesList() {
+        List<VegetableHighLikesListResponse> result = vegetableRepository.getVegetableHighLikesList();
         return responseService.getListResponse(HttpStatus.OK.value(), result);
     }
 }

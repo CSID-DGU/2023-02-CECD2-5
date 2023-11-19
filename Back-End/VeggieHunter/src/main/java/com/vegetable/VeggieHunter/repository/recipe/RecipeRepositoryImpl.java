@@ -6,8 +6,10 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.vegetable.veggiehunter.dto.response.likes.RecipeLikesListResponse;
 import com.vegetable.veggiehunter.dto.response.likes.VegetableLikesListResponse;
+import com.vegetable.veggiehunter.dto.response.recipe.RecipeHighLikesListResponse;
 import com.vegetable.veggiehunter.dto.response.recipe.RecipeListResponse;
 import com.vegetable.veggiehunter.dto.response.recipe.RecipeVegetableListResponse;
+import com.vegetable.veggiehunter.dto.response.vegetable.VegetableHighLikesListResponse;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
@@ -16,7 +18,9 @@ import java.util.List;
 import static com.vegetable.veggiehunter.domain.QPrice.price1;
 import static com.vegetable.veggiehunter.domain.QRecipe.recipe;
 import static com.vegetable.veggiehunter.domain.QPhoto.photo;
+import static com.vegetable.veggiehunter.domain.QRecipeLikes.recipeLikes;
 import static com.vegetable.veggiehunter.domain.QVegetable.vegetable;
+import static com.vegetable.veggiehunter.domain.QVegetableLikes.vegetableLikes;
 
 public class RecipeRepositoryImpl implements RecipeRepositoryCustom{
     private JPAQueryFactory queryFactory;
@@ -62,6 +66,34 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom{
                 .where(recipe.id.in(recipeIdList))
                 .leftJoin(photo).on(recipe.id.eq(photo.recipe.id))
                 .limit(1)
+                .fetch();
+    }
+
+    @Override
+    public List<RecipeHighLikesListResponse> getRecipeHighLikesList() {
+        return queryFactory
+                .select(
+                        Projections.constructor(
+                                RecipeHighLikesListResponse.class,
+                                recipeLikes.recipe.id,
+                                recipeLikes.recipe.title,
+                                photo.savedFile,
+                                recipeLikes.recipeLikes.count()
+                        )
+                )
+                .from(recipeLikes)
+                .leftJoin(photo)
+                .on(recipeLikes.recipe.id.eq(photo.recipe.id)
+                        .and(photo.id.eq(
+                                JPAExpressions
+                                        .select(photo.id.max())
+                                        .from(photo)
+                                        .where(photo.recipe.id.eq(recipeLikes.recipe.id))
+                        ))
+                )
+                .groupBy(recipeLikes.recipe.id, recipeLikes.recipe.title, photo.savedFile)
+                .orderBy(recipeLikes.recipeLikes.count().desc())
+                .limit(5)
                 .fetch();
     }
 }
