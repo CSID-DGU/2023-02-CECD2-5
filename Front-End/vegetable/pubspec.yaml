@@ -74,6 +74,7 @@ flutter:
   assets:
     - assets/images/kakao.png
     - assets/images/home.png
+    - assets/images/no_img.jpg
   
   fonts:
     - family: Pacifico

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'recipe_send.dart';
 
 class MakeRecipePage extends StatefulWidget {
   final int vegetableId;
@@ -47,6 +48,42 @@ class _MakeRecipePageState extends State<MakeRecipePage> {
     }
   }
 
+  void handleSubmit() {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+
+      printRecipeData();
+
+      var recipeSender = RecipeSender(
+        recipeName: _recipeName,
+        vegetableId: widget.vegetableId,
+        ingredients: _ingredients,
+        steps: _steps,
+        selectedImage: _selectedImage,
+      );
+
+      recipeSender.sendRecipe();
+    }
+  }
+
+  void printRecipeData() {
+    print('Recipe Name: $_recipeName');
+    print('Vegetable ID: ${widget.vegetableId}');
+    print('Ingredients:');
+    for (var i = 0; i < _ingredients.length; i++) {
+      print('  Ingredient ${i + 1}: ${_ingredientNameControllers[i].text}, Quantity: ${_ingredientQuantityControllers[i].text}');
+    }
+    print('Steps:');
+    for (var i = 0; i < _steps.length; i++) {
+      print('  Step ${i + 1}: ${_stepControllers[i].text}');
+    }
+    if (_selectedImage != null) {
+      print('Selected Image: ${_selectedImage!.path}');
+    } else {
+      print('No image selected');
+    }
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,12 +127,7 @@ class _MakeRecipePageState extends State<MakeRecipePage> {
                     ? Text('No image selected.')
                     : Image.file(_selectedImage!, width: 100, height: 100),
                 ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      _formKey.currentState!.save();
-                      // TODO: Implement submit functionality, including handling of the image
-                    }
-                  },
+                  onPressed: handleSubmit,
                   child: Text('Submit Recipe'),
                 ),
               ],
