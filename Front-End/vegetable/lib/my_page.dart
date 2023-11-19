@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:vegetable/vegetable_detail.dart';
-import 'mainpage.dart';
-import 'underbar.dart';
-import 'menu.dart';
+import 'recipe_info.dart';
 import 'dart:convert';
 
 Future<List<Map<String, dynamic>>> fetchVegetables() async {
@@ -22,6 +20,24 @@ Future<List<Map<String, dynamic>>> fetchVegetables() async {
   } else {
     print("Error fetching vegetable likes: ${response.body}");
     throw Exception('Failed to load vegetable likes from the server');
+  }
+}
+
+Future<List<Map<String, dynamic>>> fetchRecipes() async {
+  User user = await UserApi.instance.me();
+  final url = Uri.parse('http://ec2-54-180-36-184.ap-northeast-2.compute.amazonaws.com:8080/recipeLikes');
+  final response = await http.post(
+    url,
+    headers: {'Content-Type': 'application/json'},
+    body: jsonEncode({'userId': '${user.id}', 'userName': '${user.kakaoAccount?.profile?.nickname}'}),
+  );
+
+  if (response.statusCode == 200) {
+    var jsonResponse = json.decode(utf8.decode(response.bodyBytes));
+    return List<Map<String, dynamic>>.from(jsonResponse['data']);
+  } else {
+    print("Error fetching recipe likes: ${response.body}");
+    throw Exception('Failed to load recipe likes from the server');
   }
 }
 
@@ -84,9 +100,7 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
         children: [
           _buildVegetablesPage(),
           // 레시피 페이지
-          Center(
-            child: Text("레시피 페이지"),
-          ),
+          _buildRecipesPage(),
         ],
       ),
     );
@@ -101,7 +115,7 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Center(child: Text('No data available'));
+          return Center(child: Text('좋아하는 채소가 없습니다. \n좋아요를 눌러보세요!', textAlign: TextAlign.center));
         } else {
           final vegetables = snapshot.data!;
           return GridView.builder(
@@ -204,6 +218,117 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
                                 final url = Uri.parse('http://ec2-54-180-36-184.ap-northeast-2.compute.amazonaws.com:8080/vegetableLikes/$vegetableId');
 
                                 if (vegetable['isLikes']) {
+                                  final response = await http.delete(
+                                    url,
+                                    headers: {'Content-Type': 'application/json'},
+                                    body: jsonEncode({'userId': '${user.id}', 'userName': '${user.kakaoAccount?.profile?.nickname}'}),
+                                  );
+                                } else {
+                                  final response = await http.post(
+                                    url,
+                                    headers: {'Content-Type': 'application/json'},
+                                    body: jsonEncode({'userId': '${user.id}', 'userName': '${user.kakaoAccount?.profile?.nickname}'}),
+                                  );
+                                }
+                                setState(() {
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+        }
+      },
+    );
+  }
+
+  Widget _buildRecipesPage() {
+    return FutureBuilder<List<Map<String, dynamic>>>(
+      future: fetchRecipes(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return Center(child: Text('좋아하는 레시피가 없습니다. \n좋아요를 눌러보세요!', textAlign: TextAlign.center));
+        } else {
+          final recipes = snapshot.data!;
+          return GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 1,
+              childAspectRatio: (MediaQuery.of(context).size.width) / (100 + 16),
+            ),
+            itemCount: recipes.length,
+            itemBuilder: (context, index) {
+              final recipe = recipes[index];
+              String title = recipe['title'];
+              int recipeId = recipe['id'];
+
+              return GestureDetector(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => RecipeDetailPage(
+                      recipeId: recipeId,
+                    ),
+                  ),
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(color: Colors.grey[300]!, width: 1),
+                    ),
+                  ),
+                  child: Card(
+                    margin: EdgeInsets.zero,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 5.0, top: 12.0, right: 5.0, bottom: 12.0),
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            flex: 4,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 3.0),
+                              child: Image.network(
+                                recipe['image'],
+                                fit: BoxFit.contain,
+                                height: 100,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 4,
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                '${recipe['title']}',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontFamily: 'SOYO_Maple_Bold',
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 3, // Adjust the spacing between the icon and other widgets
+                            child: IconButton(
+                              icon: (recipe['isLikes'])
+                                ? Icon(Icons.favorite, color: Colors.red) // Show a colored heart when liked
+                                : Icon(Icons.favorite_border), // Show an outline heart when not liked
+                              onPressed: () async {
+                                User user = await UserApi.instance.me();
+                                int recipeId = recipe['id'];
+
+                                final url = Uri.parse('http://ec2-54-180-36-184.ap-northeast-2.compute.amazonaws.com:8080/recipeLikes/$recipeId');
+
+                                if (recipe['isLikes']) {
                                   final response = await http.delete(
                                     url,
                                     headers: {'Content-Type': 'application/json'},
