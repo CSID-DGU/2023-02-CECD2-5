@@ -39,6 +39,7 @@ dependencies:
   flutter_email_sender: 6.0.2
   firebase_messaging: ^14.7.4
   permission_handler: ^8.3.0
+  image_picker: ^1.0.4
 
 
   # The following adds the Cupertino Icons font to your application.
