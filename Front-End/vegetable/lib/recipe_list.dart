@@ -134,21 +134,53 @@ class _RecipeListPageState extends State<RecipeListPage> {
                 );
               },
             ),
-            floatingActionButton: FloatingActionButton(
-  onPressed: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MakeRecipePage(vegetableId: widget.vegetableId),
+floatingActionButton: Container(
+  width: 80.0, // 원하는 크기로 조절
+  child: FloatingActionButton(
+    onPressed: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MakeRecipePage(vegetableId: widget.vegetableId),
+        ),
+      ).then((_) {
+        // Optionally refresh the recipe list after returning from the MakeRecipePage
+        fetchRecipes();
+      });
+    },
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+    child: Row(
+    children: [
+      Padding(
+          padding: const EdgeInsets.only(left: 5.0), // 앞쪽에 8.0의 여백을 추가
+          child: Flexible(
+            flex: 2,
+            child: Icon(Icons.add_circle_outline),
+          ),
+        ),
+      SizedBox(width: 5),
+      Padding(
+          padding: const EdgeInsets.only(right: 5.0), // 앞쪽에 8.0의 여백을 추가
+          child: Flexible(
+        flex: 4, // 조절 가능한 비율
+        child: Text('등록', style: TextStyle(
+          fontSize: 18,
+          fontFamily: 'SOYO_Maple_Bold',
+        )),
       ),
-    ).then((_) {
-      // Optionally refresh the recipe list after returning from the MakeRecipePage
-      fetchRecipes();
-    });
-  },
-  child: Icon(Icons.add),
-  backgroundColor: Colors.green,
+        ),
+      
+    ],
+  ),
+    backgroundColor: Color.fromARGB(255, 118, 191, 126),
+  ),
 ),
+
+
+
+
+
+
 
     );
   }
