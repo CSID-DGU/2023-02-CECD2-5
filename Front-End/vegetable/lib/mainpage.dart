@@ -144,7 +144,7 @@ class MainContent extends StatelessWidget {
           child: Column(
             children: [
               Padding(
-                padding: EdgeInsets.all(10),
+                padding: EdgeInsets.all(20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -188,9 +188,35 @@ class MainContent extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.network(vegetable['image'], height: 100), // 이미지 표시
-                          SizedBox(height: 8),
-                          Text(vegetable['name'], style: TextStyle(fontFamily: 'SOYO_Maple_Regular')), // 채소 이름 표시
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.network(vegetable['image'], height: 100), // 이미지 표시
+                            ],
+                          ),
+                          SizedBox(height: 8), // Add spacing between image and text
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                vegetable['name'], 
+                                style: TextStyle(
+                                  fontFamily: 'SOYO_Maple_Regular',
+                                  fontSize: 15
+                                )
+                              ), // 채소 이름 표시
+                              SizedBox(width: 4), // Add some spacing between name and heart icon
+                              Icon(Icons.favorite, color: Colors.red, size: 15,), // Heart icon
+                              SizedBox(width: 4), // Add some spacing between heart icon and like count
+                              Text(
+                                '(' + vegetable['likeCount'].toString() + ')',
+                                style: TextStyle(
+                                  fontFamily: 'SOYO_Maple_Regular',
+                                  fontSize: 12
+                                )
+                              ), // Like count
+                            ],
+                          ),
                         ],
                       ),
                     );
@@ -206,7 +232,7 @@ class MainContent extends StatelessWidget {
           child: Column(
             children: [
               Padding(
-                padding: EdgeInsets.all(10),
+                padding: EdgeInsets.all(20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
