@@ -9,14 +9,14 @@ class RecipeSender {
   final int vegetableId;
   final List<Map<String, String>> ingredients;
   final List<String> steps;
-  final File? selectedImage;
+  final List<File> selectedImages;
 
   RecipeSender({
     required this.recipeName,
     required this.vegetableId,
     required this.ingredients,
     required this.steps,
-    this.selectedImage,
+    required this.selectedImages,
   });
 
   Future<void> sendRecipe() async {
@@ -59,10 +59,12 @@ class RecipeSender {
     ));
 
     // Add multipart file for image, if present
-    if (selectedImage != null) {
-      request.files.add(await http.MultipartFile.fromPath(
-        'files', selectedImage!.path
-      ));
+    if (selectedImages != null) {
+      for (var image in selectedImages) {
+        request.files.add(await http.MultipartFile.fromPath(
+          'files', image.path,
+        ));
+      }
     }
 
     try {

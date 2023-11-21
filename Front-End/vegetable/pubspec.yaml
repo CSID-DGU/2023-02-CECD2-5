@@ -40,7 +40,9 @@ dependencies:
   firebase_messaging: ^14.7.4
   permission_handler: ^8.3.0
   image_picker: ^1.0.4
+  multi_image_picker: ^4.8.0
   http_parser: ^4.0.0
+  path_provider: ^2.0.2
 
 
   # The following adds the Cupertino Icons font to your application.

@@ -191,7 +191,7 @@ class MainContent extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Image.network(vegetable['image'], height: 100), // 이미지 표시
+                              Image.network(vegetable['image'], height: 90, width:130), // 이미지 표시
                             ],
                           ),
                           SizedBox(height: 8), // Add spacing between image and text

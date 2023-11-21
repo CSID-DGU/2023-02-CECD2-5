@@ -141,7 +141,7 @@ floatingActionButton: Container(
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => MakeRecipePage(vegetableId: widget.vegetableId),
+          builder: (context) => MakeRecipePage(vegetableId: widget.vegetableId, vegetableName: widget.vegetableName),
         ),
       ).then((_) {
         // Optionally refresh the recipe list after returning from the MakeRecipePage
