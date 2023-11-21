@@ -72,7 +72,6 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom{
                 .from(recipe)
                 .where(recipe.id.in(recipeIdList))
                 .leftJoin(photo).on(recipe.id.eq(photo.recipe.id))
-                .limit(1)
                 .fetch();
     }
 
