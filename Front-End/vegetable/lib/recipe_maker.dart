@@ -67,14 +67,70 @@ Future<void> _pickImage() async {
   });
 }
 
+  void _addNewIngredientField() {
+    setState(() {
+      _ingredients.add({'ingredient': '', 'quantity': ''});
+      _ingredientNameControllers.add(TextEditingController());
+      _ingredientQuantityControllers.add(TextEditingController());
+    });
+  }
+
+  void _removeIngredientField(int index) {
+    setState(() {
+      _ingredients.removeAt(index);
+      _ingredientNameControllers[index].dispose();
+      _ingredientQuantityControllers[index].dispose();
+      _ingredientNameControllers.removeAt(index);
+      _ingredientQuantityControllers.removeAt(index);
+    });
+  }
+
+  void _addNewStepField() {
+    setState(() {
+      _steps.add('');
+      _stepControllers.add(TextEditingController());
+    });
+  }
+
+  void _removeStepField(int index) {
+    setState(() {
+      _steps.removeAt(index);
+      _stepControllers[index].dispose();
+      _stepControllers.removeAt(index);
+    });
+  }
 
 
   void handleSubmit() {
-    // 에러가 하나라도 있으면 등록하지 않음
-    if (_validationError != null || _ingredientValidationErrors.containsValue(null)) {
+    // 레시피 이름 검증
+    if (_recipeName.isEmpty) {
+      setState(() {
+        _validationError = '제목을 입력하세요.';
+      });
       return;
     }
 
+    // 재료 검증
+    for (var controller in _ingredientNameControllers) {
+      if (controller.text.isEmpty) {
+        setState(() {
+          _validationError = '재료를 입력하세요.';
+        });
+        return;
+      }
+    }
+
+    // 요리 순서 검증
+    for (var controller in _stepControllers) {
+      if (controller.text.isEmpty) {
+        setState(() {
+          _validationError = '요리 순서를 입력하세요.';
+        });
+        return;
+      }
+    }
+
+    // 모든 검증을 통과했을 경우
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
@@ -89,6 +145,8 @@ Future<void> _pickImage() async {
       );
 
       recipeSender.sendRecipe();
+
+      Navigator.pop(context); // 모든 입력이 완료되면 이전 화면으로 돌아감
     }
   }
 
@@ -307,11 +365,14 @@ Future<void> _pickImage() async {
                   onPressed: () {
                     handleSubmit();
                     // RecipeListPage로 이동
+                  if (_validationError == null) {
+                    // 에러가 없을 경우에만 RecipeListPage로 이동
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => RecipeListPage(vegetableId: widget.vegetableId, vegetableName: widget.vegetableName)),
                     );
-                  },
+                  }
+                },
                     style: ElevatedButton.styleFrom(
                       primary: Color.fromARGB(255, 118, 191, 126),
                       minimumSize: Size(100, 45),
@@ -405,23 +466,7 @@ Future<void> _pickImage() async {
   }
 
 
-  void _addNewIngredientField() {
-    setState(() {
-      _ingredients.add({'ingredient': '', 'quantity': ''});
-      _ingredientNameControllers.add(TextEditingController());
-      _ingredientQuantityControllers.add(TextEditingController());
-    });
-  }
 
-  void _removeIngredientField(int index) {
-    setState(() {
-      _ingredients.removeAt(index);
-      _ingredientNameControllers[index].dispose();
-      _ingredientQuantityControllers[index].dispose();
-      _ingredientNameControllers.removeAt(index);
-      _ingredientQuantityControllers.removeAt(index);
-    });
-  }
 
   List<Widget> _buildStepFields() {
     List<Widget> stepFields = [];
@@ -466,20 +511,6 @@ Future<void> _pickImage() async {
   }
 
 
-  void _addNewStepField() {
-    setState(() {
-      _steps.add('');
-      _stepControllers.add(TextEditingController());
-    });
-  }
-
-  void _removeStepField(int index) {
-    setState(() {
-      _steps.removeAt(index);
-      _stepControllers[index].dispose();
-      _stepControllers.removeAt(index);
-    });
-  }
 
 
   @override
