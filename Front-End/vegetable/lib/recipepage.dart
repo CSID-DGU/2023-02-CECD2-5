@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'recipe_list.dart';
 import 'underbar.dart';
+import 'menu.dart';
 
 class RecipePage extends StatefulWidget {
   @override
@@ -62,10 +63,10 @@ class _RecipePageState extends State<RecipePage> {
     }
   }
 
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
         title: _isSearching ? _buildSearchField() : Text(
           "레시피",
           style: TextStyle(color: Colors.white, fontSize: 20, fontFamily: 'SOYO_Maple_Bold'),
@@ -96,8 +97,18 @@ Widget build(BuildContext context) {
               });
             },
           ),
+          // 메뉴 버튼 추가
+          Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                icon: Icon(Icons.menu, color: Colors.white),
+                onPressed: () => Scaffold.of(context).openEndDrawer(),
+              );
+            },
+          ),
         ],
       ),
+      endDrawer: buildMenuDrawer(context),
     body: GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2, // Set the number of columns here
