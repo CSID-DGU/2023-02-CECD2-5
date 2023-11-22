@@ -1,12 +1,7 @@
-import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 import 'recipe_send.dart';
-import 'recipe_list.dart';
 
 class MakeRecipePage extends StatefulWidget {
   final int vegetableId;
@@ -26,12 +21,9 @@ class _MakeRecipePageState extends State<MakeRecipePage> {
   List<TextEditingController> _ingredientQuantityControllers = [];
   List<String> _steps = [''];
   List<TextEditingController> _stepControllers = [];
-  List<File> _selectedImages = [];  // 수정: 이미지들을 담을 List<File> 추가
-  String? _validationError;
-  Map<String, String?> _ingredientValidationErrors = {};
-  
-
+  List<File> _selectedImages = [];
   final ImagePicker _picker = ImagePicker();
+  bool _isPhotoSelected = true; // 사진 선택 여부를 나타내는 상태 변수
 
   @override
   void initState() {
@@ -45,27 +37,26 @@ class _MakeRecipePageState extends State<MakeRecipePage> {
     }
   }
 
-Future<void> _pickImage() async {
-  List<XFile> pickedFiles = [];
+  Future<void> _pickImage() async {
+    List<XFile> pickedFiles = [];
 
-  try {
-    pickedFiles = await _picker.pickMultiImage();
-  } catch (e) {
-    print('Error picking images: $e');
-    // Handle any errors here
+    try {
+      pickedFiles = await _picker.pickMultiImage();
+    } catch (e) {
+      print('Error picking images: $e');
+    }
+
+    List<File> selectedImages = [];
+    for (var pickedFile in pickedFiles) {
+      File imageFile = File(pickedFile.path);
+      selectedImages.add(imageFile);
+    }
+
+    setState(() {
+      _selectedImages = selectedImages;
+      _isPhotoSelected = selectedImages.isNotEmpty; // 사진이 선택되었는지 확인
+    });
   }
-
-  List<File> selectedImages = [];
-  for (var pickedFile in pickedFiles) {
-    // Convert XFile to File
-    File imageFile = File(pickedFile.path);
-    selectedImages.add(imageFile);
-  }
-
-  setState(() {
-    _selectedImages = selectedImages;
-  });
-}
 
   void _addNewIngredientField() {
     setState(() {
@@ -76,13 +67,15 @@ Future<void> _pickImage() async {
   }
 
   void _removeIngredientField(int index) {
-    setState(() {
-      _ingredients.removeAt(index);
-      _ingredientNameControllers[index].dispose();
-      _ingredientQuantityControllers[index].dispose();
-      _ingredientNameControllers.removeAt(index);
-      _ingredientQuantityControllers.removeAt(index);
-    });
+    if (_ingredients.length > 1) {
+      setState(() {
+        _ingredients.removeAt(index);
+        _ingredientNameControllers[index].dispose();
+        _ingredientQuantityControllers[index].dispose();
+        _ingredientNameControllers.removeAt(index);
+        _ingredientQuantityControllers.removeAt(index);
+      });
+    }
   }
 
   void _addNewStepField() {
@@ -93,94 +86,61 @@ Future<void> _pickImage() async {
   }
 
   void _removeStepField(int index) {
-    setState(() {
-      _steps.removeAt(index);
-      _stepControllers[index].dispose();
-      _stepControllers.removeAt(index);
-    });
+    if (_steps.length > 1) {
+      setState(() {
+        _steps.removeAt(index);
+        _stepControllers[index].dispose();
+        _stepControllers.removeAt(index);
+      });
+    }
   }
 
-
-  void handleSubmit() {
-    // 레시피 이름 검증
-    if (_recipeName.isEmpty) {
-      setState(() {
-        _validationError = '제목을 입력하세요.';
-      });
-      return;
-    }
-
-    // 재료 검증
-    for (var controller in _ingredientNameControllers) {
-      if (controller.text.isEmpty) {
-        setState(() {
-          _validationError = '재료를 입력하세요.';
-        });
-        return;
-      }
-    }
-
-    // 요리 순서 검증
-    for (var controller in _stepControllers) {
-      if (controller.text.isEmpty) {
-        setState(() {
-          _validationError = '요리 순서를 입력하세요.';
-        });
-        return;
-      }
-    }
-
-    // 모든 검증을 통과했을 경우
-    if (_formKey.currentState!.validate()) {
+  void handleSubmit() async {
+    if (_formKey.currentState!.validate() && _selectedImages.isNotEmpty) {
+      // 모든 입력 필드의 값이 유효하고, 사진이 선택되었는지 확인
       _formKey.currentState!.save();
 
-      printRecipeData();
-
-      var recipeSender = RecipeSender(
+      // 데이터 전송 준비
+      RecipeSender sender = RecipeSender(
         recipeName: _recipeName,
         vegetableId: widget.vegetableId,
-        ingredients: _ingredients,
+        ingredients: _ingredients.map((i) => {
+          'ingredient': i['ingredient']!,
+          'quantity': i['quantity']!
+        }).toList(),
         steps: _steps,
         selectedImages: _selectedImages,
       );
 
-      recipeSender.sendRecipe();
+      // 입력된 값들을 콘솔에 출력
+      print('레시피 이름: ${sender.recipeName}');
+      print('야채 ID: ${sender.vegetableId}');
+      print('재료: ${sender.ingredients}');
+      print('요리 순서: ${sender.steps}');
+      print('선택된 사진 수: ${sender.selectedImages.length}');
 
-      Navigator.pop(context); // 모든 입력이 완료되면 이전 화면으로 돌아감
+      // 데이터 전송
+      await sender.sendRecipe();
+
+      // 데이터 전송 후, 화면을 닫거나 다른 작업 수행
+      Navigator.pop(context);
+    } else if (_selectedImages.isEmpty) {
+      // 사진이 선택되지 않았을 때 경고 메시지 설정
+      setState(() {
+        _isPhotoSelected = false;
+      });
     }
   }
-
-  void printRecipeData() {
-    print('Recipe Name: $_recipeName');
-    print('Vegetable ID: ${widget.vegetableId}');
-    print('Ingredients:');
-    for (var i = 0; i < _ingredients.length; i++) {
-      print('  Ingredient ${i + 1}: ${_ingredientNameControllers[i].text}, Quantity: ${_ingredientQuantityControllers[i].text}');
-    }
-    print('Steps:');
-    for (var i = 0; i < _steps.length; i++) {
-      print('  Step ${i + 1}: ${_stepControllers[i].text}');
-    }
-    if (_selectedImages.isNotEmpty) {
-      print('Selected Image: ${_selectedImages[0].path}');
-    } else {
-      print('No image selected');
-    }
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          '레시피 등록',
-          style: TextStyle(color: Colors.white, fontSize: 20, fontFamily: 'SOYO_Maple_Bold'),
-        ),
+        title: Text('레시피 등록'),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          icon: Icon(Icons.arrow_back_ios_new),
           onPressed: () => Navigator.pop(context),
         ),
-        backgroundColor: Color.fromARGB(255, 118, 191, 126),
       ),
       body: SingleChildScrollView(
         child: Form(
@@ -189,202 +149,46 @@ Future<void> _pickImage() async {
             padding: EdgeInsets.all(8.0),
             child: Column(
               children: <Widget>[
-                ListTile(
-                  title: Padding(
-                    padding: const EdgeInsets.only(top: 10, bottom: 10, left: 5),
+                TextFormField(
+                  decoration: InputDecoration(labelText: '레시피 제목'),
+                  onChanged: (value) => _recipeName = value,
+                  validator: (value) => value!.isEmpty ? '제목을 입력하세요.' : null,
+                ),
+                ElevatedButton(
+                  onPressed: _pickImage,
+                  child: Text('사진 추가'),
+                ),
+                if (!_isPhotoSelected) // 사진이 선택되지 않았을 때의 경고 메시지
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
                     child: Text(
-                      '레시피 제목',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'SOYO_Maple_Bold',
-                      ),
+                      '사진을 선택해주세요.',
+                      style: TextStyle(color: Colors.red),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                  child: TextFormField(
-                    onChanged: (value) {
-                      setState(() {
-                        _validationError = (value == null || value.isEmpty)
-                            ? 'Please enter a recipe name'
-                            : null;
-                      });
-                    },
-                    onSaved: (value) {
-                      _recipeName = value!;
-                    },
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: '레시피 제목',
-                      errorText: _validationError,
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color.fromARGB(255, 118, 191, 126)),
-                      ),
-                    ),
-                  ),
-                ),
-                Divider(thickness: 2,),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ListTile(
-                        title: Padding(
-                          padding: const EdgeInsets.only(top: 10, bottom: 10, left: 5),
-                          child: Text(
-                            '음식 사진',
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'SOYO_Maple_Bold',
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(right: 10), // 왼쪽 여백 조절
-                      child: ElevatedButton(
-                        onPressed: () => _pickImage(),
-                        style: ElevatedButton.styleFrom(
-                          primary: Color.fromARGB(255, 118, 191, 126),
-                        ),
-                        child: Text(
-                          '+ 사진 추가',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontFamily: 'SOYO_Maple_Regular',
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
                 _selectedImages.isEmpty
-                    ? Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 16.0),
-                        child: Text(
-                          '음식 사진을 추가해보세요',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontFamily: 'SOYO_Maple_Regular',
-                          ),
-                        ),
-                      )
-                    : Row(
-                      children: _selectedImages
-                        .map((image) => Padding(
-                          padding: const EdgeInsets.only(left: 10.0),
-                          child: Image.file(image, width: 150, height: 150),
-                        ))
-                        .toList(),
-                    ),
-                Divider(thickness: 2,),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ListTile(
-                        title: Padding(
-                          padding: const EdgeInsets.only(top: 10, bottom: 10, left: 5),
-                          child: Text(
-                            '재료',
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'SOYO_Maple_Bold',
-                            ),
-                          ),
+                    ? Container()
+                    : SizedBox(
+                        height: 100,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: _selectedImages.length,
+                          itemBuilder: (context, index) => Image.file(_selectedImages[index]),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(right: 10), // 왼쪽 여백 조절
-                      child: ElevatedButton(
-                        onPressed: () => _addNewIngredientField(),
-                        style: ElevatedButton.styleFrom(
-                          primary: Color.fromARGB(255, 118, 191, 126),
-                        ),
-                        child: Text(
-                          '+ 재료 추가',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontFamily: 'SOYO_Maple_Regular',
-                          ),
-                        ),
-                      ),
-                    ),
-
-                  ],
-                ),
                 ..._buildIngredientFields(),
-                Divider(thickness: 2,),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ListTile(
-                        title: Padding(
-                          padding: const EdgeInsets.only(top: 10, bottom: 10, left: 5),
-                          child: Text(
-                            '요리 순서',
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'SOYO_Maple_Bold',
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(right: 10), // 왼쪽 여백 조절
-                      child: ElevatedButton(
-                        onPressed: () => _addNewStepField(),
-                        style: ElevatedButton.styleFrom(
-                          primary: Color.fromARGB(255, 118, 191, 126),
-                        ),
-                        child: Text(
-                          '+ 순서 추가',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontFamily: 'SOYO_Maple_Regular',
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                ElevatedButton(
+                  onPressed: _addNewIngredientField,
+                  child: Text('재료 추가'),
                 ),
                 ..._buildStepFields(),
-                Padding(
-                  padding: EdgeInsets.only(top:30), // 왼쪽 여백 조절
-                  child: ElevatedButton(
-                  onPressed: () {
-                    handleSubmit();
-                    // RecipeListPage로 이동
-                  if (_validationError == null) {
-                    // 에러가 없을 경우에만 RecipeListPage로 이동
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => RecipeListPage(vegetableId: widget.vegetableId, vegetableName: widget.vegetableName)),
-                    );
-                  }
-                },
-                    style: ElevatedButton.styleFrom(
-                      primary: Color.fromARGB(255, 118, 191, 126),
-                      minimumSize: Size(100, 45),
-                    ),
-                    child: Text(
-                      '레시피 등록',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'SOYO_Maple_Bold',
-                      ),
-                    ),
-                  ),
+                ElevatedButton(
+                  onPressed: _addNewStepField,
+                  child: Text('요리 순서 추가'),
+                ),
+                ElevatedButton(
+                  onPressed: handleSubmit,
+                  child: Text('레시피 등록'),
                 ),
               ],
             ),
@@ -401,57 +205,17 @@ Future<void> _pickImage() async {
         Row(
           children: [
             Expanded(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: TextFormField(
-                  controller: _ingredientNameControllers[i],
-                  onChanged: (value) {
-                    setState(() {
-                      _ingredientValidationErrors['ingredient'] =
-                          (value == null || value.isEmpty)
-                              ? 'Please enter an ingredient'
-                              : null;
-                    });
-                  },
-                  onSaved: (value) {
-                    _ingredients[i]['ingredient'] = value!;
-                  },
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: '재료 이름',
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color.fromARGB(255, 118, 191, 126)),
-                    ),
-                    errorText: _ingredientValidationErrors['ingredient'],
-                  ),
-                ),
+              child: TextFormField(
+                controller: _ingredientNameControllers[i],
+                decoration: InputDecoration(labelText: '재료 ${i + 1}'),
+                validator: (value) => value!.isEmpty ? '재료를 입력하세요.' : null,
               ),
             ),
             Expanded(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: TextFormField(
-                  controller: _ingredientQuantityControllers[i],
-                  onChanged: (value) {
-                    setState(() {
-                      _ingredientValidationErrors['quantity'] =
-                          (value == null || value.isEmpty)
-                              ? 'Please enter a quantity'
-                              : null;
-                    });
-                  },
-                  onSaved: (value) {
-                    _ingredients[i]['quantity'] = value!;
-                  },
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: '재료의 양',
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color.fromARGB(255, 118, 191, 126)),
-                    ),
-                    errorText: _ingredientValidationErrors['quantity'],
-                  ),
-                ),
+              child: TextFormField(
+                controller: _ingredientQuantityControllers[i],
+                decoration: InputDecoration(labelText: '재료의 양'),
+                validator: (value) => value!.isEmpty ? '재료의 양을 입력하세요.' : null,
               ),
             ),
             IconButton(
@@ -465,9 +229,6 @@ Future<void> _pickImage() async {
     return ingredientFields;
   }
 
-
-
-
   List<Widget> _buildStepFields() {
     List<Widget> stepFields = [];
     for (int i = 0; i < _steps.length; i++) {
@@ -475,28 +236,10 @@ Future<void> _pickImage() async {
         Row(
           children: [
             Expanded(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                child: TextFormField(
-                  onChanged: (value) {
-                    setState(() {
-                      _validationError = (value == null || value.isEmpty)
-                          ? 'Please enter a step'
-                          : null;
-                    });
-                  },
-                  onSaved: (value) {
-                    _steps[i] = value!;
-                  },
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Step ${i + 1}',
-                    errorText: _validationError,
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color.fromARGB(255, 118, 191, 126)),
-                    ),
-                  ),
-                ),
+              child: TextFormField(
+                controller: _stepControllers[i],
+                decoration: InputDecoration(labelText: '순서 ${i + 1}'),
+                validator: (value) => value!.isEmpty ? '요리 순서를 입력하세요.' : null,
               ),
             ),
             IconButton(
@@ -509,9 +252,6 @@ Future<void> _pickImage() async {
     }
     return stepFields;
   }
-
-
-
 
   @override
   void dispose() {
