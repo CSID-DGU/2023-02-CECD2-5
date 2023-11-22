@@ -208,6 +208,9 @@ class _MakeRecipePageState extends State<MakeRecipePage> {
               child: TextFormField(
                 controller: _ingredientNameControllers[i],
                 decoration: InputDecoration(labelText: '재료 ${i + 1}'),
+                onChanged: (value) {
+                  _ingredients[i]['ingredient'] = value;
+                },
                 validator: (value) => value!.isEmpty ? '재료를 입력하세요.' : null,
               ),
             ),
@@ -215,6 +218,9 @@ class _MakeRecipePageState extends State<MakeRecipePage> {
               child: TextFormField(
                 controller: _ingredientQuantityControllers[i],
                 decoration: InputDecoration(labelText: '재료의 양'),
+                onChanged: (value) {
+                  _ingredients[i]['quantity'] = value;
+                },
                 validator: (value) => value!.isEmpty ? '재료의 양을 입력하세요.' : null,
               ),
             ),
@@ -239,6 +245,9 @@ class _MakeRecipePageState extends State<MakeRecipePage> {
               child: TextFormField(
                 controller: _stepControllers[i],
                 decoration: InputDecoration(labelText: '순서 ${i + 1}'),
+                onChanged: (value) {
+                  _steps[i] = value;
+                },
                 validator: (value) => value!.isEmpty ? '요리 순서를 입력하세요.' : null,
               ),
             ),
