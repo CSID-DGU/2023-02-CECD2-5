@@ -136,7 +136,10 @@ class _MakeRecipePageState extends State<MakeRecipePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('레시피 등록'),
+        title: Text('레시피 등록',
+        style: TextStyle(color: Colors.white, fontSize: 20, fontFamily: 'SOYO_Maple_Bold')
+        ),
+        backgroundColor: Color.fromARGB(255, 118, 191, 126), // 앱바 배경색
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new),
           onPressed: () => Navigator.pop(context),
@@ -149,21 +152,43 @@ class _MakeRecipePageState extends State<MakeRecipePage> {
             padding: EdgeInsets.all(8.0),
             child: Column(
               children: <Widget>[
-                TextFormField(
-                  decoration: InputDecoration(labelText: '레시피 제목'),
+                Theme(
+                  data: Theme.of(context).copyWith(
+                    inputDecorationTheme: InputDecorationTheme(
+                      errorStyle: TextStyle(
+                        fontFamily: 'SOYO_Maple_regular',
+                      ),
+                    ),
+                  ),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      labelText: '레시피 제목',
+                      labelStyle: TextStyle(fontFamily: 'SOYO_Maple_regular'), // 레이블에 폰트 적용
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                    ),
                   onChanged: (value) => _recipeName = value,
                   validator: (value) => value!.isEmpty ? '제목을 입력하세요.' : null,
+                  ),
                 ),
                 ElevatedButton(
                   onPressed: _pickImage,
-                  child: Text('사진 추가'),
+                  child: Text(
+                    '사진 추가',
+                    style: TextStyle(fontFamily: 'SOYO_Maple_regular'),
+                    ),
+                  style: ElevatedButton.styleFrom(
+                    primary: Color.fromARGB(255, 118, 191, 126),
+                    onPrimary: Colors.white,
+                  ),
                 ),
                 if (!_isPhotoSelected) // 사진이 선택되지 않았을 때의 경고 메시지
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: Text(
                       '사진을 선택해주세요.',
-                      style: TextStyle(color: Colors.red),
+                      style: TextStyle(color: Colors.red, fontFamily: 'SOYO_Maple_regular'),
                     ),
                   ),
                 _selectedImages.isEmpty
@@ -179,16 +204,38 @@ class _MakeRecipePageState extends State<MakeRecipePage> {
                 ..._buildIngredientFields(),
                 ElevatedButton(
                   onPressed: _addNewIngredientField,
-                  child: Text('재료 추가'),
+                  child: Text(
+                    '재료 추가',
+                    style: TextStyle(fontFamily: 'SOYO_Maple_regular'),
+                    ),
+                  style: ElevatedButton.styleFrom(
+                    primary: Color.fromARGB(255, 118, 191, 126),
+                    onPrimary: Colors.white, // 버튼의 글자색
+                  ),
                 ),
                 ..._buildStepFields(),
                 ElevatedButton(
                   onPressed: _addNewStepField,
-                  child: Text('요리 순서 추가'),
+                  child: Text(
+                    '요리 순서 추가',
+                    style: TextStyle(fontFamily: 'SOYO_Maple_regular'),
+                    ),
+                  style: ElevatedButton.styleFrom(
+                    primary: Color.fromARGB(255, 118, 191, 126),
+                    onPrimary: Colors.white, // 버튼의 글자색
+                  ),                  
                 ),
                 ElevatedButton(
                   onPressed: handleSubmit,
-                  child: Text('레시피 등록'),
+                  child: Text(
+                    '레시피 등록',
+                    style: TextStyle(fontFamily: 'SOYO_Maple_regular'),
+                    ),
+                  style: ElevatedButton.styleFrom(
+                    primary: Color.fromARGB(255, 118, 191, 126),
+                    onPrimary: Colors.white, // 버튼의 글자색
+                    // 추가적인 스타일 요소들을 여기에 추가할 수 있습니다.
+                  ),                  
                 ),
               ],
             ),
@@ -205,24 +252,56 @@ class _MakeRecipePageState extends State<MakeRecipePage> {
         Row(
           children: [
             Expanded(
+                child: Theme(
+                  data: Theme.of(context).copyWith(
+                    inputDecorationTheme: InputDecorationTheme(
+                      errorStyle: TextStyle(
+                        fontFamily: 'SOYO_Maple_regular',
+                      ),
+                    ),
+                  ),
               child: TextFormField(
                 controller: _ingredientNameControllers[i],
-                decoration: InputDecoration(labelText: '재료 ${i + 1}'),
+                decoration: InputDecoration(
+                  labelText: '재료 ${i + 1}',
+                  labelStyle: TextStyle(fontFamily: 'SOYO_Maple_regular'),                  
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                    ),
+
+                    ),
                 onChanged: (value) {
                   _ingredients[i]['ingredient'] = value;
                 },
                 validator: (value) => value!.isEmpty ? '재료를 입력하세요.' : null,
               ),
             ),
+            ),
             Expanded(
+                child: Theme(
+                  data: Theme.of(context).copyWith(
+                    inputDecorationTheme: InputDecorationTheme(
+                      errorStyle: TextStyle(
+                        fontFamily: 'SOYO_Maple_regular',
+                      ),
+                    ),
+                  ),
               child: TextFormField(
                 controller: _ingredientQuantityControllers[i],
-                decoration: InputDecoration(labelText: '재료의 양'),
+                decoration: InputDecoration(
+                  labelText: '재료의 양',
+                  labelStyle: TextStyle(fontFamily: 'SOYO_Maple_regular'),                  
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                  
+                  ),
                 onChanged: (value) {
                   _ingredients[i]['quantity'] = value;
                 },
                 validator: (value) => value!.isEmpty ? '재료의 양을 입력하세요.' : null,
               ),
+            ),
             ),
             IconButton(
               icon: Icon(Icons.delete),
@@ -242,14 +321,30 @@ class _MakeRecipePageState extends State<MakeRecipePage> {
         Row(
           children: [
             Expanded(
+                child: Theme(
+                  data: Theme.of(context).copyWith(
+                    inputDecorationTheme: InputDecorationTheme(
+                      errorStyle: TextStyle(
+                        fontFamily: 'SOYO_Maple_regular',
+                      ),
+                    ),
+                  ),
               child: TextFormField(
                 controller: _stepControllers[i],
-                decoration: InputDecoration(labelText: '순서 ${i + 1}'),
+                decoration: InputDecoration(
+                  labelText: '순서 ${i + 1}',
+                  labelStyle: TextStyle(fontFamily: 'SOYO_Maple_regular'),                  
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                  
+                  ),
                 onChanged: (value) {
                   _steps[i] = value;
                 },
                 validator: (value) => value!.isEmpty ? '요리 순서를 입력하세요.' : null,
               ),
+            ),
             ),
             IconButton(
               icon: Icon(Icons.delete),
