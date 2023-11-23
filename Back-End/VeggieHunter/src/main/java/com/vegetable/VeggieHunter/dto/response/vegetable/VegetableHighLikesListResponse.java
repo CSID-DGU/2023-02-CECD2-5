@@ -11,5 +11,9 @@ public class VegetableHighLikesListResponse {
     private Long id;
     private String name;
     private String image;
+
+    private String unit;
+
+    private Double price;
     private Long likeCount;
 }

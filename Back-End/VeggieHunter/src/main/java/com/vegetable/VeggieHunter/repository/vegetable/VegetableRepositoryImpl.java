@@ -1,13 +1,9 @@
 package com.vegetable.veggiehunter.repository.vegetable;
 
-import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.vegetable.veggiehunter.domain.Price;
-import com.vegetable.veggiehunter.domain.Vegetable;
 import com.vegetable.veggiehunter.dto.response.likes.VegetableLikesListResponse;
 import com.vegetable.veggiehunter.dto.response.recipe.RecipeVegetableListResponse;
 import com.vegetable.veggiehunter.dto.response.vegetable.VegetableGraphResponse;
@@ -198,6 +194,11 @@ public class VegetableRepositoryImpl implements VegetableRepositoryCustom {
 
     @Override
     public List<VegetableHighLikesListResponse> getVegetableHighLikesList() {
+        LocalDate mostRecentDate = queryFactory
+                .select(price1.createdDate.max())
+                .from(price1)
+                .fetchOne();
+
         return queryFactory
                 .select(
                         Projections.constructor(
@@ -205,13 +206,69 @@ public class VegetableRepositoryImpl implements VegetableRepositoryCustom {
                                 vegetableLikes.vegetable.id,
                                 vegetableLikes.vegetable.name,
                                 vegetableLikes.vegetable.image,
+                                vegetableLikes.vegetable.main_unit,
+                                price1.price.avg(),
                                 vegetableLikes.vegetableLikes.count()
                         )
                 )
                 .from(vegetableLikes)
-                .groupBy(vegetableLikes.vegetable.id, vegetableLikes.vegetable.name, vegetableLikes.vegetable.image)
+                .leftJoin(price1).on(price1.unit.eq(vegetableLikes.vegetable.main_unit)
+                        .and(price1.createdDate.eq(mostRecentDate))
+                        .and(price1.name.eq(vegetableLikes.vegetable.name)))
+                .groupBy(vegetableLikes.vegetable.id, vegetableLikes.vegetable.name,
+                        vegetableLikes.vegetable.image, vegetableLikes.vegetable.main_unit)
                 .orderBy(vegetableLikes.vegetableLikes.count().desc())
                 .limit(5)
+                .fetch();
+    }
+
+    @Override
+    public VegetableListResponse getTodayVegetable() {
+        LocalDate mostRecentDate = queryFactory
+                .select(price1.createdDate.max())
+                .from(price1)
+                .fetchOne();
+
+        // 가장 최근 날짜의 어제 날짜 계산
+        LocalDate yesterdayOfMostRecentDate = mostRecentDate.minusDays(1);
+
+        return (VegetableListResponse) queryFactory
+                .select(
+                        Projections.constructor(
+                                VegetableListResponse.class,
+                                vegetable.id,
+                                vegetable.name,
+                                vegetable.image,
+                                vegetable.main_unit,
+                                price1.price.avg(),
+                                Expressions.numberTemplate(Double.class,
+                                        "({0} - coalesce({1}, 0)) / coalesce({1}, 1)",
+                                        price1.price.avg(),
+                                        JPAExpressions
+                                                .select(price1.price.avg())
+                                                .from(price1)
+                                                .where(price1.unit.eq(vegetable.main_unit)
+                                                        .and(price1.createdDate.eq(yesterdayOfMostRecentDate))
+                                                        .and(price1.name.eq(vegetable.name)))
+                                )
+                        )
+                )
+                .from(vegetable)
+                .leftJoin(price1).on(price1.unit.eq(vegetable.main_unit)
+                        .and(price1.createdDate.eq(mostRecentDate))
+                        .and(price1.name.eq(vegetable.name)))
+                .groupBy(vegetable.id, vegetable.name, vegetable.image, vegetable.main_unit)
+                .orderBy(Expressions.numberTemplate(Double.class,
+                        "({0} - coalesce({1}, 0)) / coalesce({1}, 1)",
+                        price1.price.avg(),
+                        JPAExpressions
+                                .select(price1.price.avg())
+                                .from(price1)
+                                .where(price1.unit.eq(vegetable.main_unit)
+                                        .and(price1.createdDate.eq(yesterdayOfMostRecentDate))
+                                        .and(price1.name.eq(vegetable.name)))
+                ).asc())
+                .limit(1)
                 .fetch();
     }
 }
