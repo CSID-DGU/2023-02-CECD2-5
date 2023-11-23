@@ -191,10 +191,10 @@ class MainContent extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Image.network(vegetable['image'], height: 90, width:130), // 이미지 표시
+                              Image.network(vegetable['image'], height: 90, width:120), // 이미지 표시
                             ],
                           ),
-                          SizedBox(height: 8), // Add spacing between image and text
+                          SizedBox(height: 10), // Add spacing between image and text
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -205,9 +205,9 @@ class MainContent extends StatelessWidget {
                                   fontSize: 15
                                 )
                               ), // 채소 이름 표시
-                              SizedBox(width: 4), // Add some spacing between name and heart icon
+                              SizedBox(width: 8), // Add some spacing between name and heart icon
                               Icon(Icons.favorite, color: Colors.red, size: 15,), // Heart icon
-                              SizedBox(width: 4), // Add some spacing between heart icon and like count
+                              SizedBox(width: 1), // Add some spacing between heart icon and like count
                               Text(
                                 '(' + vegetable['likeCount'].toString() + ')',
                                 style: TextStyle(
@@ -274,9 +274,35 @@ class MainContent extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.network(recipe['image'], height: 100), // 이미지 표시
-                          SizedBox(height: 8),
-                          Text(recipe['title'], style: TextStyle(fontFamily: 'SOYO_Maple_Regular')), // 레시피 이름 표시
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.network(recipe['image'], height: 90, width:120), // 이미지 표시
+                            ],
+                          ),
+                          SizedBox(height: 10), // Add spacing between image and text
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                recipe['title'], 
+                                style: TextStyle(
+                                  fontFamily: 'SOYO_Maple_Regular',
+                                  fontSize: 15
+                                )
+                              ), // 채소 이름 표시
+                              SizedBox(width: 8), // Add some spacing between name and heart icon
+                              Icon(Icons.favorite, color: Colors.red, size: 15,), // Heart icon
+                              SizedBox(width: 1), // Add some spacing between heart icon and like count
+                              Text(
+                                '(' + recipe['likeCount'].toString() + ')',
+                                style: TextStyle(
+                                  fontFamily: 'SOYO_Maple_Regular',
+                                  fontSize: 12
+                                )
+                              ), // Like count
+                            ],
+                          ),
                         ],
                       ),
                     );
