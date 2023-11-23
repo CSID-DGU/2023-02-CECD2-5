@@ -107,6 +107,15 @@ class _VegetablePageState extends State<VegetablePage> {
               });
             },
           ),
+          // 메뉴 버튼 추가
+          Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                icon: Icon(Icons.menu, color: Colors.white),
+                onPressed: () => Scaffold.of(context).openEndDrawer(),
+              );
+            },
+          ),
         ],
       ),
       endDrawer: buildMenuDrawer(context),
