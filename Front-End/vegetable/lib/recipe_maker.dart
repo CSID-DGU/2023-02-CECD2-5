@@ -152,6 +152,20 @@ class _MakeRecipePageState extends State<MakeRecipePage> {
             padding: EdgeInsets.all(8.0),
             child: Column(
               children: <Widget>[
+                ListTile(
+                  title: Padding(
+                    padding: const EdgeInsets.only(top: 10, bottom: 10, left: 5),
+                    child: Text(
+                      '레시피 제목',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'SOYO_Maple_Bold',
+                      ),
+                    ),
+                  ),
+                ),
                 Theme(
                   data: Theme.of(context).copyWith(
                     inputDecorationTheme: InputDecorationTheme(
@@ -172,17 +186,62 @@ class _MakeRecipePageState extends State<MakeRecipePage> {
                   validator: (value) => value!.isEmpty ? '제목을 입력하세요.' : null,
                   ),
                 ),
-                ElevatedButton(
-                  onPressed: _pickImage,
-                  child: Text(
-                    '사진 추가',
-                    style: TextStyle(fontFamily: 'SOYO_Maple_regular'),
+                Divider(thickness: 2,),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ListTile(
+                        title: Padding(
+                          padding: const EdgeInsets.only(top: 10, bottom: 10, left: 5),
+                          child: Text(
+                            '음식 사진',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'SOYO_Maple_Bold',
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
-                  style: ElevatedButton.styleFrom(
-                    primary: Color.fromARGB(255, 118, 191, 126),
-                    onPrimary: Colors.white,
-                  ),
+                    Padding(
+                      padding: EdgeInsets.only(right: 10), // 왼쪽 여백 조절
+                      child: ElevatedButton(
+                        onPressed: () => _pickImage(),
+                        style: ElevatedButton.styleFrom(
+                          primary: Color.fromARGB(255, 118, 191, 126),
+                        ),
+                        child: Text(
+                          '+ 사진 추가',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontFamily: 'SOYO_Maple_Regular',
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
+                 _selectedImages.isEmpty
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16.0),
+                        child: Text(
+                          '음식 사진을 추가해보세요',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontFamily: 'SOYO_Maple_Regular',
+                          ),
+                        ),
+                      )
+                    : Row(
+                      children: _selectedImages
+                        .map((image) => Padding(
+                          padding: const EdgeInsets.only(left: 10.0),
+                          child: Image.file(image, width: 150, height: 150),
+                        ))
+                        .toList(),
+                    ),
                 if (!_isPhotoSelected) // 사진이 선택되지 않았을 때의 경고 메시지
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
@@ -191,40 +250,82 @@ class _MakeRecipePageState extends State<MakeRecipePage> {
                       style: TextStyle(color: Colors.red, fontFamily: 'SOYO_Maple_regular'),
                     ),
                   ),
-                _selectedImages.isEmpty
-                    ? Container()
-                    : SizedBox(
-                        height: 100,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: _selectedImages.length,
-                          itemBuilder: (context, index) => Image.file(_selectedImages[index]),
+                Divider(thickness: 2,),   
+                Row(
+                  children: [
+                    Expanded(
+                      child: ListTile(
+                        title: Padding(
+                          padding: const EdgeInsets.only(top: 10, bottom: 10, left: 5),
+                          child: Text(
+                            '재료',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'SOYO_Maple_Bold',
+                            ),
+                          ),
                         ),
                       ),
-                ..._buildIngredientFields(),
-                ElevatedButton(
-                  onPressed: _addNewIngredientField,
-                  child: Text(
-                    '재료 추가',
-                    style: TextStyle(fontFamily: 'SOYO_Maple_regular'),
                     ),
-                  style: ElevatedButton.styleFrom(
-                    primary: Color.fromARGB(255, 118, 191, 126),
-                    onPrimary: Colors.white, // 버튼의 글자색
-                  ),
+                    Padding(
+                      padding: EdgeInsets.only(right: 10), // 왼쪽 여백 조절
+                      child: ElevatedButton(
+                        onPressed: () => _addNewIngredientField(),
+                        style: ElevatedButton.styleFrom(
+                          primary: Color.fromARGB(255, 118, 191, 126),
+                        ),
+                        child: Text(
+                          '+ 재료 추가',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontFamily: 'SOYO_Maple_Regular',
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),   
+                ..._buildIngredientFields(),
+                Divider(thickness: 2,),  
+                Row(
+                  children: [
+                    Expanded(
+                      child: ListTile(
+                        title: Padding(
+                          padding: const EdgeInsets.only(top: 10, bottom: 10, left: 5),
+                          child: Text(
+                            '요리 순서',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'SOYO_Maple_Bold',
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(right: 10), // 왼쪽 여백 조절
+                      child: ElevatedButton(
+                        onPressed: () => _addNewStepField(),
+                        style: ElevatedButton.styleFrom(
+                          primary: Color.fromARGB(255, 118, 191, 126),
+                        ),
+                        child: Text(
+                          '+ 순서 추가',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontFamily: 'SOYO_Maple_Regular',
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 ..._buildStepFields(),
-                ElevatedButton(
-                  onPressed: _addNewStepField,
-                  child: Text(
-                    '요리 순서 추가',
-                    style: TextStyle(fontFamily: 'SOYO_Maple_regular'),
-                    ),
-                  style: ElevatedButton.styleFrom(
-                    primary: Color.fromARGB(255, 118, 191, 126),
-                    onPrimary: Colors.white, // 버튼의 글자색
-                  ),                  
-                ),
                 ElevatedButton(
                   onPressed: handleSubmit,
                   child: Text(
