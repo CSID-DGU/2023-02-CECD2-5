@@ -29,14 +29,28 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int _selectedIndex = 1;
+  Map<String, dynamic>? today;
   List<dynamic> homeVegetableList = [];
   List<dynamic> homeRecipeList = [];
 
   @override
   void initState() {
     super.initState();
+    fetchToday();
     fetchHomeVegetables();
     fetchHomeRecipes();
+  }
+
+  Future<void> fetchToday() async {
+    final url = Uri.parse('http://ec2-54-180-36-184.ap-northeast-2.compute.amazonaws.com:8080/home/today');
+    final response = await http.get(url);
+    final jsonData = json.decode(response.body);
+
+    if (jsonData['success'] && jsonData['code'] == 200) {
+      setState(() {
+        today = json.decode(utf8.decode(response.bodyBytes))['data'];
+      });
+    }
   }
 
   Future<void> fetchHomeVegetables() async {
@@ -76,7 +90,7 @@ class _MainPageState extends State<MainPage> {
         index: _selectedIndex,
         children: [
           VegetablePage(),
-          MainContent(homeVegetableList: homeVegetableList, homeRecipeList: homeRecipeList),
+          MainContent(homeVegetableList: homeVegetableList, homeRecipeList: homeRecipeList, today: today),
           RecipePage(),
         ],
       ),
@@ -95,8 +109,9 @@ class _MainPageState extends State<MainPage> {
 class MainContent extends StatelessWidget {
   final List<dynamic> homeVegetableList;
   final List<dynamic> homeRecipeList;
+  final Map<String, dynamic>? today;
 
-  MainContent({Key? key, required this.homeVegetableList, required this.homeRecipeList}) : super(key: key);
+  MainContent({Key? key, required this.homeVegetableList, required this.homeRecipeList, required this.today}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -110,28 +125,134 @@ class MainContent extends StatelessWidget {
               children: [
                 Expanded(
                   child: Center(
-                    child: Text(
-                      "오늘의 채소",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'SOYO_Maple_Regular',
-                        color: Colors.white,
-                      ),
-                    ),
+                    child: today != null && today!['vegetable'] != null
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "오늘의 채소\n",  // Add a line break here
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'SOYO_Maple_Regular',
+                                color: Colors.white,
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.all(16.0), // Adjust the padding as needed
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10.0), // Adjust the radius as needed
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                Image.network(
+                                  today!['vegetable']['image'] ?? '',
+                                  width: 120, // adjust the width as needed
+                                  height: 70, // adjust the height as needed
+                                ),
+                                ]
+                              ),
+                            ),
+                            Text(
+                              '\n'+today!['vegetable']['name'],
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'SOYO_Maple_Regular',
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        )
+                      : CircularProgressIndicator(),
                   ),
                 ),
                 Expanded(
                   child: Center(
-                    child: Text(
-                      "오늘의 레시피",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'SOYO_Maple_Regular',
-                        color: Colors.white,
+                    child: today != null && today!['recipe'] != null
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "오늘의 레시피\n",  // Add a line break here
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'SOYO_Maple_Regular',
+                                color: Colors.white,
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.all(16.0), // Adjust the padding as needed
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10.0), // Adjust the radius as needed
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                Image.network(
+                                  today!['recipe']['image'] ?? '',
+                                  width: 120, // adjust the width as needed
+                                  height: 70, // adjust the height as needed
+                                ),
+                                ]
+                              ),
+                            ),
+                            Text(
+                              '\n'+today!['recipe']['title'],
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'SOYO_Maple_Regular',
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        )
+                      : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "오늘의 레시피\n",  // Add a line break here
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'SOYO_Maple_Regular',
+                                color: Colors.white,
+                              ),
+                            ),
+                            Container(
+                              height: 145,
+                              padding: EdgeInsets.all(16.0), // Adjust the padding as needed
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.0), // Adjust the radius as needed
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                Text(
+                                  "레시피를 추가해보세요!",  // Add a line break here
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'SOYO_Maple_Regular',
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ]
+                            ),
+                          ),
+                        ]
                       ),
-                    ),
                   ),
                 ),
               ],
@@ -185,44 +306,55 @@ class MainContent extends StatelessWidget {
                           ),
                         );
                       },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.network(vegetable['image'], height: 90, width:120), // 이미지 표시
-                            ],
-                          ),
-                          SizedBox(height: 10), // Add spacing between image and text
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                vegetable['name'], 
-                                style: TextStyle(
-                                  fontFamily: 'SOYO_Maple_Regular',
-                                  fontSize: 15
-                                )
-                              ), // 채소 이름 표시
-                              SizedBox(width: 8), // Add some spacing between name and heart icon
-                              Icon(Icons.favorite, color: Colors.red, size: 15,), // Heart icon
-                              SizedBox(width: 1), // Add some spacing between heart icon and like count
-                              Text(
-                                '(' + vegetable['likeCount'].toString() + ')',
-                                style: TextStyle(
-                                  fontFamily: 'SOYO_Maple_Regular',
-                                  fontSize: 12
-                                )
-                              ), // Like count
-                            ],
-                          ),
-                        ],
+                      child: Container(
+                        width: 130,
+                        padding: EdgeInsets.all(8.0), // Adjust the padding as needed
+                        margin: EdgeInsets.symmetric(horizontal: 8.0), // Add margin between cards
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: Colors.white,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.network(vegetable['image'], height: 80), // 이미지 표시
+                            SizedBox(height: 20), 
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(width: 7), // Add spacing between the text and the container edge
+                                Text(
+                                  vegetable['name'],
+                                  style: TextStyle(
+                                    fontFamily: 'SOYO_Maple_Regular',
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                Spacer(), // Add Spacer to push the following widgets to the right
+                                Row(
+                                  children: [
+                                    Icon(Icons.favorite, color: Colors.red, size: 15,),
+                                    SizedBox(width: 4),
+                                    Text(
+                                      '(' + vegetable['likeCount'].toString() + ')',
+                                      style: TextStyle(
+                                        fontFamily: 'SOYO_Maple_Regular',
+                                        fontSize: 12,
+                                      ),
+                                    ), // Like count
+                                  ],
+                                ),
+                                SizedBox(width: 7), // Add spacing between the icon and the like count
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },
                 ),
               ),
+
             ],
           ),
         ),
@@ -266,49 +398,59 @@ class MainContent extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (context) => RecipeDetailPage(
-                              recipeId: recipe['id'],
-                            ),
+                              recipeId: recipe['id'],),
                           ),
                         );
                       },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.network(recipe['image'], height: 90, width:120), // 이미지 표시
-                            ],
-                          ),
-                          SizedBox(height: 10), // Add spacing between image and text
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                recipe['title'], 
-                                style: TextStyle(
-                                  fontFamily: 'SOYO_Maple_Regular',
-                                  fontSize: 15
-                                )
-                              ), // 채소 이름 표시
-                              SizedBox(width: 8), // Add some spacing between name and heart icon
-                              Icon(Icons.favorite, color: Colors.red, size: 15,), // Heart icon
-                              SizedBox(width: 1), // Add some spacing between heart icon and like count
-                              Text(
-                                '(' + recipe['likeCount'].toString() + ')',
-                                style: TextStyle(
-                                  fontFamily: 'SOYO_Maple_Regular',
-                                  fontSize: 12
-                                )
-                              ), // Like count
-                            ],
-                          ),
-                        ],
+                      child: Container(
+                        width: 130,
+                        padding: EdgeInsets.all(8.0), // Adjust the padding as needed
+                        margin: EdgeInsets.symmetric(horizontal: 8.0), // Add margin between cards
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: Colors.white,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.network(recipe['image'], height: 80), // 이미지 표시
+                            SizedBox(height: 20), 
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(width: 7), // Add spacing between the text and the container edge
+                                Text(
+                                  recipe['title'],
+                                  style: TextStyle(
+                                    fontFamily: 'SOYO_Maple_Regular',
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                Spacer(), // Add Spacer to push the following widgets to the right
+                                Row(
+                                  children: [
+                                    Icon(Icons.favorite, color: Colors.red, size: 15,),
+                                    SizedBox(width: 4),
+                                    Text(
+                                      '(' + recipe['likeCount'].toString() + ')',
+                                      style: TextStyle(
+                                        fontFamily: 'SOYO_Maple_Regular',
+                                        fontSize: 12,
+                                      ),
+                                    ), // Like count
+                                  ],
+                                ),
+                                SizedBox(width: 7), // Add spacing between the icon and the like count
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },
                 ),
               ),
+
             ],
           ),
         ),
