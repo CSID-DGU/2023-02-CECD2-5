@@ -116,7 +116,17 @@ class _RecipeListPageState extends State<RecipeListPage> {
       ),
       endDrawer: buildMenuDrawer(context),
       body: displayRecipes.isEmpty
-        ? Center(child: CircularProgressIndicator())
+        ? Center(
+            child: Text(
+              "레시피를 추가해주세요",
+              style: TextStyle(
+                fontSize: 20,
+                fontFamily: 'SOYO_Maple_Bold',
+              ),
+              textAlign: TextAlign.center,
+            ),
+          )
+
         : ListView.builder(
             itemCount: displayRecipes.length,
             itemBuilder: (context, index) {

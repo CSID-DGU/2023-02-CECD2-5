@@ -1,5 +1,6 @@
 package com.vegetable.veggiehunter.service.vegetable;
 
+import com.vegetable.veggiehunter.dto.response.today.TodayResponse;
 import com.vegetable.veggiehunter.dto.response.vegetable.VegetableGraphResponse;
 import com.vegetable.veggiehunter.domain.Vegetable;
 import com.vegetable.veggiehunter.dto.response.CommonResponse;

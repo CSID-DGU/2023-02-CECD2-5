@@ -21,4 +21,6 @@ public interface VegetableRepositoryCustom {
     List<RecipeVegetableListResponse> getRecipeVegetableList();
 
     List<VegetableHighLikesListResponse> getVegetableHighLikesList();
+
+    VegetableListResponse getTodayVegetable();
 }

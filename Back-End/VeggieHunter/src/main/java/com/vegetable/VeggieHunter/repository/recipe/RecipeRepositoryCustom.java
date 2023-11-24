@@ -12,4 +12,5 @@ public interface RecipeRepositoryCustom {
     List<RecipeLikesListResponse> getRecipeLikesList(List<Long> recipeIdList);
 
     List<RecipeHighLikesListResponse> getRecipeHighLikesList();
+    RecipeListResponse getRecipeRandom(Long vegetableId);
 }
