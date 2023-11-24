@@ -99,6 +99,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      endDrawer: buildMenuDrawer(context),
       body: recipeDetail == null
           ? Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
@@ -141,12 +142,16 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                       Positioned(
                         top: 22.0,
                         right: 16.0,
-                        child: GestureDetector(
-                          onTap: () => buildMenuDrawer(context),
-                          child: Container(
-                            padding: EdgeInsets.all(8.0),
-                            child: Icon(Icons.menu, color: Colors.white),
-                          ),
+                        child: Builder(
+                          builder: (BuildContext context) {
+                            return GestureDetector(
+                              onTap: () => Scaffold.of(context).openEndDrawer(),
+                              child: Container(
+                                padding: EdgeInsets.all(8.0),
+                                child: Icon(Icons.menu, color: Colors.white),
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ],
