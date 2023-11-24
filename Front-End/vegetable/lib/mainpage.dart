@@ -124,53 +124,67 @@ class MainContent extends StatelessWidget {
             child: Row(
               children: [
                 Expanded(
-                  child: Center(
-                    child: today != null && today!['vegetable'] != null
-                      ? Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              "오늘의 채소\n",  // Add a line break here
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'SOYO_Maple_Regular',
-                                color: Colors.white,
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.all(16.0), // Adjust the padding as needed
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10.0), // Adjust the radius as needed
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                Image.network(
-                                  today!['vegetable']['image'] ?? '',
-                                  width: 120, // adjust the width as needed
-                                  height: 70, // adjust the height as needed
-                                ),
-                                ]
-                              ),
-                            ),
-                            Text(
-                              '\n'+today!['vegetable']['name'],
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'SOYO_Maple_Regular',
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        )
-                      : CircularProgressIndicator(),
+  child: Center(
+    child: today != null && today!['vegetable'] != null
+        ? Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                "오늘의 채소\n",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'SOYO_Maple_Regular',
+                  color: Colors.white,
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  // VegetableDetailPage()로 이동하는 코드를 작성
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => VegetableDetailPage(
+                      vegetableId: today!['vegetable']['id'],
+                      price: today!['vegetable']['price'],
+                      unit: today!['vegetable']['unit'],
+                    )),
+                  );
+                },
+                child: Container(
+                  padding: EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Image.network(
+                        today!['vegetable']['image'] ?? '',
+                        width: 140,
+                        height: 80,
+                      ),
+                    ],
                   ),
                 ),
+              ),
+              Text(
+                '\n' + today!['vegetable']['name'],
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'SOYO_Maple_Regular',
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          )
+        : CircularProgressIndicator(),
+  ),
+),
+
                 Expanded(
                   child: Center(
                     child: today != null && today!['recipe'] != null
@@ -187,22 +201,33 @@ class MainContent extends StatelessWidget {
                                 color: Colors.white,
                               ),
                             ),
-                            Container(
-                              padding: EdgeInsets.all(16.0), // Adjust the padding as needed
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10.0), // Adjust the radius as needed
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                Image.network(
-                                  today!['recipe']['image'] ?? '',
-                                  width: 120, // adjust the width as needed
-                                  height: 70, // adjust the height as needed
+                            GestureDetector(
+                              onTap: () {
+                                // VegetableDetailPage()로 이동하는 코드를 작성
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => RecipeDetailPage(
+                                    recipeId: today!['recipe']['id'],
+                                  )),
+                                );
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(16.0),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10.0),
                                 ),
-                                ]
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Image.network(
+                                      today!['recipe']['image'] ?? '',
+                                      width: 140,
+                                      height: 80,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                             Text(
