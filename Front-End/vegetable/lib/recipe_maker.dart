@@ -172,18 +172,27 @@ class _MakeRecipePageState extends State<MakeRecipePage> {
                       errorStyle: TextStyle(
                         fontFamily: 'SOYO_Maple_regular',
                       ),
-                    ),
-                  ),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      labelText: '레시피 제목',
-                      labelStyle: TextStyle(fontFamily: 'SOYO_Maple_regular'), // 레이블에 폰트 적용
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color.fromARGB(255, 118, 191, 126),
+                        ),
                       ),
                     ),
-                  onChanged: (value) => _recipeName = value,
-                  validator: (value) => value!.isEmpty ? '제목을 입력하세요.' : null,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        labelText: '레시피 제목',
+                        labelStyle: TextStyle(fontFamily: 'SOYO_Maple_regular'), // 레이블에 폰트 적용
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        contentPadding: EdgeInsets.all(8.0),
+                      ),
+                    onChanged: (value) => _recipeName = value,
+                    validator: (value) => value!.isEmpty ? '제목을 입력하세요.' : null,
+                    ),
                   ),
                 ),
                 Divider(thickness: 2,),
@@ -330,12 +339,13 @@ class _MakeRecipePageState extends State<MakeRecipePage> {
                   onPressed: handleSubmit,
                   child: Text(
                     '레시피 등록',
-                    style: TextStyle(fontFamily: 'SOYO_Maple_regular'),
+                    style: TextStyle(fontFamily: 'SOYO_Maple_bold',
+                    fontSize: 17.0),
                     ),
                   style: ElevatedButton.styleFrom(
                     primary: Color.fromARGB(255, 118, 191, 126),
                     onPrimary: Colors.white, // 버튼의 글자색
-                    // 추가적인 스타일 요소들을 여기에 추가할 수 있습니다.
+                    fixedSize: Size(120, 60)
                   ),                  
                 ),
               ],
@@ -353,29 +363,37 @@ class _MakeRecipePageState extends State<MakeRecipePage> {
         Row(
           children: [
             Expanded(
-                child: Theme(
-                  data: Theme.of(context).copyWith(
-                    inputDecorationTheme: InputDecorationTheme(
-                      errorStyle: TextStyle(
-                        fontFamily: 'SOYO_Maple_regular',
+              child: Theme(
+                data: Theme.of(context).copyWith(
+                  inputDecorationTheme: InputDecorationTheme(
+                    errorStyle: TextStyle(
+                      fontFamily: 'SOYO_Maple_regular',
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color.fromARGB(255, 118, 191, 126),
+                        ),
                       ),
-                    ),
                   ),
-              child: TextFormField(
-                controller: _ingredientNameControllers[i],
-                decoration: InputDecoration(
-                  labelText: '재료 ${i + 1}',
-                  labelStyle: TextStyle(fontFamily: 'SOYO_Maple_regular'),                  
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5.0),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: TextFormField(
+                    controller: _ingredientNameControllers[i],
+                    decoration: InputDecoration(
+                      labelText: '재료 ${i + 1}',
+                      labelStyle: TextStyle(fontFamily: 'SOYO_Maple_regular'),                  
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                        ),
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                      contentPadding: EdgeInsets.all(8.0),
                     ),
-
-                    ),
-                onChanged: (value) {
+                  onChanged: (value) {
                   _ingredients[i]['ingredient'] = value;
                 },
                 validator: (value) => value!.isEmpty ? '재료를 입력하세요.' : null,
               ),
+            ),
             ),
             ),
             Expanded(
@@ -385,23 +403,31 @@ class _MakeRecipePageState extends State<MakeRecipePage> {
                       errorStyle: TextStyle(
                         fontFamily: 'SOYO_Maple_regular',
                       ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color.fromARGB(255, 118, 191, 126),
+                        ),
+                      ),
                     ),
                   ),
-              child: TextFormField(
-                controller: _ingredientQuantityControllers[i],
-                decoration: InputDecoration(
-                  labelText: '재료의 양',
-                  labelStyle: TextStyle(fontFamily: 'SOYO_Maple_regular'),                  
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                  
-                  ),
-                onChanged: (value) {
-                  _ingredients[i]['quantity'] = value;
-                },
-                validator: (value) => value!.isEmpty ? '재료의 양을 입력하세요.' : null,
-              ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: TextFormField(
+                      controller: _ingredientQuantityControllers[i],
+                      decoration: InputDecoration(
+                        labelText: '재료의 양',
+                        labelStyle: TextStyle(fontFamily: 'SOYO_Maple_regular'),                  
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                      contentPadding: EdgeInsets.all(8.0),
+                    ),
+                  onChanged: (value) {
+                    _ingredients[i]['quantity'] = value;
+                  },
+                  validator: (value) => value!.isEmpty ? '재료의 양을 입력하세요.' : null,
+                ),
+            ),
             ),
             ),
             IconButton(
@@ -428,23 +454,31 @@ class _MakeRecipePageState extends State<MakeRecipePage> {
                       errorStyle: TextStyle(
                         fontFamily: 'SOYO_Maple_regular',
                       ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color.fromARGB(255, 118, 191, 126),
+                        ),
+                      ),
                     ),
                   ),
-              child: TextFormField(
-                controller: _stepControllers[i],
-                decoration: InputDecoration(
-                  labelText: '순서 ${i + 1}',
-                  labelStyle: TextStyle(fontFamily: 'SOYO_Maple_regular'),                  
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                  
-                  ),
-                onChanged: (value) {
-                  _steps[i] = value;
-                },
-                validator: (value) => value!.isEmpty ? '요리 순서를 입력하세요.' : null,
-              ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: TextFormField(
+                      controller: _stepControllers[i],
+                      decoration: InputDecoration(
+                        labelText: '순서 ${i + 1}',
+                        labelStyle: TextStyle(fontFamily: 'SOYO_Maple_regular'),                  
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        contentPadding: EdgeInsets.all(8.0),
+                        ),
+                      onChanged: (value) {
+                        _steps[i] = value;
+                      },
+                      validator: (value) => value!.isEmpty ? '요리 순서를 입력하세요.' : null,
+                    ),
+            ),
             ),
             ),
             IconButton(
