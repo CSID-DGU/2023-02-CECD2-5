@@ -232,7 +232,7 @@ public class VegetableRepositoryImpl implements VegetableRepositoryCustom {
         // 가장 최근 날짜의 어제 날짜 계산
         LocalDate yesterdayOfMostRecentDate = mostRecentDate.minusDays(1);
 
-        return (VegetableListResponse) queryFactory
+        List<VegetableListResponse> resultList = queryFactory
                 .select(
                         Projections.constructor(
                                 VegetableListResponse.class,
@@ -257,7 +257,7 @@ public class VegetableRepositoryImpl implements VegetableRepositoryCustom {
                 .leftJoin(price1).on(price1.unit.eq(vegetable.main_unit)
                         .and(price1.createdDate.eq(mostRecentDate))
                         .and(price1.name.eq(vegetable.name)))
-                .groupBy(vegetable.id, vegetable.name, vegetable.image, vegetable.main_unit)
+                .groupBy(vegetable.name, vegetable.image, vegetable.main_unit)
                 .orderBy(Expressions.numberTemplate(Double.class,
                         "({0} - coalesce({1}, 0)) / coalesce({1}, 1)",
                         price1.price.avg(),
@@ -268,7 +268,8 @@ public class VegetableRepositoryImpl implements VegetableRepositoryCustom {
                                         .and(price1.createdDate.eq(yesterdayOfMostRecentDate))
                                         .and(price1.name.eq(vegetable.name)))
                 ).asc())
-                .limit(1)
                 .fetch();
+
+            return resultList.get(0);
     }
 }

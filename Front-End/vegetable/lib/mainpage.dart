@@ -179,8 +179,8 @@ class MainContent extends StatelessWidget {
                           MaterialPageRoute(
                             builder: (context) => VegetableDetailPage(
                               vegetableId: vegetable['id'],
-                              price: 0.0, // Replace with actual price if available
-                              unit: 'unit', // Replace with actual unit if available
+                              price: vegetable['price'], // Replace with actual price if available
+                              unit: vegetable['unit'], // Replace with actual unit if available
                             ),
                           ),
                         );
