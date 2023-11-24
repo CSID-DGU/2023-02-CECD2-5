@@ -1,6 +1,7 @@
 package com.vegetable.veggiehunter.repository.recipe;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.SubQueryExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -40,7 +41,7 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom{
                 .on(recipe.id.eq(photo.recipe.id)
                         .and(photo.id.eq(
                                 JPAExpressions
-                                        .select(photo.id.max())
+                                        .select(photo.id.min())
                                         .from(photo)
                                         .where(photo.recipe.id.eq(recipe.id))
                         ))
@@ -64,8 +65,16 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom{
                 )
                 .from(recipe)
                 .where(recipe.id.in(recipeIdList))
-                .leftJoin(photo).on(recipe.id.eq(photo.recipe.id))
+                .leftJoin(photo).on(recipe.id.eq(photo.recipe.id)
+                        .and(photo.id.eq(
+                                JPAExpressions
+                                        .select(photo.id.min())
+                                        .from(photo)
+                                        .where(photo.recipe.id.eq(recipe.id))
+                        ))
+                )
                 .fetch();
+
     }
 
     @Override
