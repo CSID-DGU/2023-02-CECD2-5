@@ -2,9 +2,9 @@
 23-02, 컴퓨터공학종합설계2, 정준호 교수님, 남기운 팀
 
 ## VeggieHunter
-<div align="center">
-  <img src="https://github.com/CSID-DGU/2023-02-CECD2-5/assets/71585151/df7159a9-ab4c-4de5-9ded-2bf3e99ed655" alt="KakaoTalk_20231118_174402831" width="200">
-</div>
+ ![image](https://github.com/user-attachments/assets/1bd7a60a-1ec4-4fbf-90cd-7c0125cdeff7)
+
+
 
 ---
 
