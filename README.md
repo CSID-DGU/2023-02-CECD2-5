@@ -2,8 +2,7 @@
 23-02, 컴퓨터공학종합설계2, 정준호 교수님, 남기운 팀
 
 ## VeggieHunter
-![image](https://github.com/user-attachments/assets/5f6972ed-eaa9-4eeb-a740-acd07b791272)
-
+![image](https://github.com/user-attachments/assets/59e45b92-5c2c-4254-9985-ba6fd2b2169a)
 
 ---
 
